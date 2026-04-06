@@ -154,6 +154,28 @@ cp ~/system_config_git/okular/.config/okularrc ~/.var/app/org.kde.okular/config/
 
 **Other** - check the `system_config_git` folder for any other settings not auto-applied. Remember: if the app is a Flatpak, its configs belong in `~/.var/app/`, not `~/.config/`.
 
+---
+
+## Color Theme (Noctalia)
+
+**Noctalia** is the system-wide color theme. It is applied per-application — there is no single GTK/KDE theming layer — so each app gets its own config file pointing to Noctalia colors.
+
+| App | Config location | How managed |
+|---|---|---|
+| Alacritty | `~/.config/alacritty/themes/noctalia.toml` | chezmoi |
+| Kitty | `~/.config/kitty/kitty.conf` | chezmoi |
+| Zed | `~/.config/zed/themes/noctalia.json` | chezmoi |
+| Qt5 apps | `~/.config/qt5ct/colors/noctalia.conf` | chezmoi |
+| Qt6 apps | `~/.config/qt6ct/colors/noctalia.conf` | chezmoi |
+
+**Claude Code** uses the `dark-ansi` theme, which reads the terminal's ANSI color palette at runtime rather than defining its own colors. Because Alacritty's ANSI palette is Noctalia, Claude Code automatically inherits it — no extra configuration needed. The `dark-ansi` preference is persisted in `~/.claude.json`.
+
+**Gemini CLI** does not inherit ANSI colors, so it has a hand-crafted theme called `AlacrittyCompatible` defined in `~/.gemini/settings.json`. The colors in that theme are manually matched to Noctalia's Alacritty palette. That file is tracked in `system_config_git/gemini-cli/`.
+
+If you ever re-select a theme in Claude Code, run `/theme` and pick `dark-ansi`. For Gemini CLI, the theme is already set in `~/.gemini/settings.json` and requires no action.
+
+---
+
 FYI: Trigger rebuild: gh workflow run bluebuild --repo samuelueluel/samuel-niri
 
   gh workflow run triggers a workflow_dispatch event on the named workflow. The workflow file has

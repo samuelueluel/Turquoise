@@ -319,7 +319,7 @@ modules:
         # kf6-kwallet / kf6-kwallet-pam: removed — no PAM auto-unlock in Fedora 43 and gnome-keyring covers the use case
         # - python3               # already in base-main
         # - python3-evdev         # already in base-main
-        - nodejs                  # required for Gemini CLI (npm install -g @google/gemini-cli)
+        - nodejs                  # required for Gemini CLI and Claude Code
         # - os-prober             # already in base-main
         # - cosign                # already in base-main
 
@@ -420,6 +420,19 @@ modules:
           - org.kde.kontact
           - org.kde.kweather
           - org.kde.skanpage
+
+  # ── Claude Code ──────────────────────────────────────────────────────────
+  # Official curl installer; script relocates binary from /usr/local/bin to
+  # /usr/bin/ so it survives ostree deployment (local/ is a runtime overlay).
+  - type: script
+    scripts:
+      - install-claude-code.sh
+
+  # ── Gemini CLI ────────────────────────────────────────────────────────────
+  # npm install with --prefix /usr puts the binary in /usr/bin/ directly.
+  - type: script
+    scripts:
+      - install-gemini-cli.sh
 
   # ── Build patched niri_window_buttons waybar module ──────────────────────
   # Patch centers icon in highlight box when show_window_titles=false.

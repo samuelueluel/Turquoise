@@ -71,11 +71,6 @@ if ! distrobox list | grep -q "dev-box"; then
     distrobox create -Y -n dev-box -i registry.fedoraproject.org/fedora-toolbox:43
 fi
 
-echo "Installing dev tools inside distrobox (Node.js, Claude Code, Gemini CLI)..."
-distrobox enter dev-box -- sudo dnf install -y nodejs npm
-distrobox enter dev-box -- bash -c 'curl -fsSL https://claude.ai/install.sh | bash'
-distrobox enter dev-box -- bash -c 'npm config set prefix ~/.npm-global && npm install -g @google/gemini-cli'
-
 # ── 6. Refresh desktop file MIME database ────────────────────────────────────
 update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
