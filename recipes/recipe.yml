@@ -4,7 +4,6 @@ base-image: ghcr.io/ublue-os/base-main
 image-version: latest
 
 modules:
-
   # ── Bake system-level config files ────────────────────────────────────────
   # Placed first so repo files (e.g. dropbox.repo) are in place before dnf runs.
   # - /etc/yum.repos.d/dropbox.repo: avoids fetching from linux.dropbox.com in CI
@@ -95,14 +94,14 @@ modules:
     install:
       install-weak-deps: false
       packages:
-        - rpmfusion-free-release-tainted   # enables free-tainted subrepo (libdvdcss is here)
+        - rpmfusion-free-release-tainted # enables free-tainted subrepo (libdvdcss is here)
 
   # ── COPR + external repos, plus their packages ────────────────────────────
   - type: dnf
     repos:
       copr:
-        - yalter/niri            # niri compositor
-        - che/zed                # Zed editor
+        - yalter/niri # niri compositor
+        - che/zed # Zed editor
       files:
         - https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo
         # dropbox.repo is baked in via the files module (avoids CI network block)
@@ -120,7 +119,7 @@ modules:
       packages:
         - waybar
         - xdg-desktop-portal-gtk
-        - xdg-desktop-portal-gnome  # screencasting — Niri uses Smithay, not wlroots
+        - xdg-desktop-portal-gnome # screencasting — Niri uses Smithay, not wlroots
         - xwayland-satellite
         - swaylock
         - swayidle
@@ -140,11 +139,11 @@ modules:
         # hyprpicker: not in Fedora repos — add via script if needed
         - libappindicator-gtk3
         - copyq
-        - nirius                 # Niri IPC scripting tool, from Terra
-        - jq                     # JSON parsing for Waybar/Niri IPC scripts
-        - socat                  # IPC socket listener for Niri event-driven Waybar updates
-        - pamixer                # CLI volume control for Waybar scroll/click actions
-        - swayosd                # OSD popups for volume/brightness/capslock changes
+        - nirius # Niri IPC scripting tool, from Terra
+        - jq # JSON parsing for Waybar/Niri IPC scripts
+        - socat # IPC socket listener for Niri event-driven Waybar updates
+        - pamixer # CLI volume control for Waybar scroll/click actions
+        - swayosd # OSD popups for volume/brightness/capslock changes
         # dex: not in Fedora repos — XDG Autostart launcher, add via script if needed
 
   # ── Display manager ───────────────────────────────────────────────────────
@@ -197,7 +196,7 @@ modules:
         - exfatprogs
         - dosfstools
         - nfs-utils
-        - xfsprogs                # XFS filesystem tools
+        - xfsprogs # XFS filesystem tools
 
   # ── Audio ─────────────────────────────────────────────────────────────────
   - type: dnf
@@ -205,15 +204,15 @@ modules:
       install-weak-deps: false
       packages:
         - pipewire-alsa
-        - pipewire-jack-audio-connection-kit  # JACK compat (Fedora name for pipewire-jack)
+        - pipewire-jack-audio-connection-kit # JACK compat (Fedora name for pipewire-jack)
         - pipewire-pulse
         - wireplumber
         - rtkit
         - alsa-firmware
         - alsa-utils
-        - alsa-sof-firmware       # Sound Open Firmware (Fedora name for sof-firmware)
+        - alsa-sof-firmware # Sound Open Firmware (Fedora name for sof-firmware)
         - pipewire-gstreamer
-        - lsp-plugins-lv2        # LV2 audio plugins for host JACK apps
+        - lsp-plugins-lv2 # LV2 audio plugins for host JACK apps
 
   # ── Hardware + power ──────────────────────────────────────────────────────
   - type: dnf
@@ -227,16 +226,16 @@ modules:
         - upower
         - power-profiles-daemon
         - fwupd
-        - fprintd                  # fingerprint daemon
-        - fprintd-pam              # provides pam_fprintd.so; satisfies PAM fingerprint stack
+        - fprintd # fingerprint daemon
+        - fprintd-pam # provides pam_fprintd.so; satisfies PAM fingerprint stack
         - keyd
         - playerctl
         - ModemManager
-        - mesa-vulkan-drivers     # includes AMD Radeon Vulkan (ThinkPad P14s)
+        - mesa-vulkan-drivers # includes AMD Radeon Vulkan (ThinkPad P14s)
         # - mesa-va-drivers       # already in base-main (ublue upgrades it)
         # - libva-utils           # already in base-main
-        - mesa-demos              # glxinfo, eglinfo etc.
-        - thermald                # thermal management
+        - mesa-demos # glxinfo, eglinfo etc.
+        - thermald # thermal management
 
   # ── Networking infrastructure ──────────────────────────────────────────────
   - type: dnf
@@ -249,7 +248,7 @@ modules:
         - NetworkManager-openconnect-gnome
         - avahi
         - nss-mdns
-        - dnsmasq                 # used by libvirt for VM networking
+        - dnsmasq # used by libvirt for VM networking
         - openssh
         - wget
         - wireless-regdb
@@ -271,7 +270,7 @@ modules:
       install-weak-deps: false
       packages:
         - mpv
-        - swayimg                 # Wayland image viewer
+        - swayimg # Wayland image viewer
         - yt-dlp
         # - ffmpeg                # already in base-main
         - gstreamer1-plugin-libav
@@ -279,7 +278,7 @@ modules:
         - gstreamer1-plugins-good
         - gstreamer1-plugins-bad-free
         - gstreamer1-plugins-ugly
-        - libdvdcss               # from RPM Fusion nonfree-tainted
+        - libdvdcss # from RPM Fusion nonfree-tainted
         - libopenraw
         - libgsf
         - poppler-glib
@@ -293,7 +292,7 @@ modules:
         # - rsync                 # already in base-main
         - fd-find
         - ripgrep
-        - chezmoi                 # dotfile manager (replaces stow for this image)
+        - chezmoi # dotfile manager (replaces stow for this image)
         # - smartmontools         # already in base-main
         # - usbutils              # already in base-main
         - inxi
@@ -319,10 +318,20 @@ modules:
         # kf6-kwallet / kf6-kwallet-pam: removed — no PAM auto-unlock in Fedora 43 and gnome-keyring covers the use case
         # - python3               # already in base-main
         # - python3-evdev         # already in base-main
-        - nodejs                  # required for Gemini CLI and Claude Code
-        - nodejs-npm              # required for Gemini CLI installation
+        - nodejs # required for Gemini CLI and Claude Code
+        - nodejs-npm # required for Gemini CLI installation
         # - os-prober             # already in base-main
         # - cosign                # already in base-main
+        - gcc # homebrew dependency?
+        - make # homebrew dependency?
+        - libxcrypt-compat # homebrew dependency?
+
+  # ── Homebrew module  ──────────────────────────────────────────────────────
+  - type: brew
+    # Optional: Disables analytics by default
+    brew-analytics: false
+    # Optional: Periodically runs 'brew upgrade' via systemd timer
+    upgrade: false
 
   # ── Themes + appearance ────────────────────────────────────────────────────
   - type: dnf
@@ -340,8 +349,8 @@ modules:
     install:
       install-weak-deps: false
       packages:
-        - freetype-freeworld      # subpixel hinting + LCD filtering (better than stock Fedora FreeType)
-        - ibm-plex-sans-fonts     # full family: Light, Regular, SemiBold, Bold, etc.
+        - freetype-freeworld # subpixel hinting + LCD filtering (better than stock Fedora FreeType)
+        - ibm-plex-sans-fonts # full family: Light, Regular, SemiBold, Bold, etc.
         - ibm-plex-mono-fonts
         - google-noto-emoji-fonts
         - google-noto-sans-fonts
@@ -353,7 +362,7 @@ modules:
   - type: fonts
     fonts:
       nerd-fonts:
-        - JetBrainsMono           # full family direct from Nerd Fonts releases
+        - JetBrainsMono # full family direct from Nerd Fonts releases
 
   # ── Virtualization ────────────────────────────────────────────────────────
   - type: dnf
@@ -397,8 +406,8 @@ modules:
           - com.github.jeromerobert.pdfarranger
           - org.gnumeric.Gnumeric
           - org.gnome.meld
-          - com.abisource.AbiWord          # for opening Word files
-          - org.texstudio.TeXstudio        # bundles TeXLive
+          - com.abisource.AbiWord # for opening Word files
+          - org.texstudio.TeXstudio # bundles TeXLive
           # Audio/media
           - com.github.wwmm.easyeffects
           - org.pulseaudio.pavucontrol
@@ -406,7 +415,7 @@ modules:
           # Work/GIS
           - org.qgis.qgis//stable
           # Entertainment
-          - org.nicotine_plus.Nicotine     # NOTE: archived on Flathub, may stop receiving updates
+          - org.nicotine_plus.Nicotine # NOTE: archived on Flathub, may stop receiving updates
           - com.stremio.Stremio
           # System
           - io.missioncenter.MissionCenter
@@ -421,19 +430,6 @@ modules:
           - org.kde.kontact
           - org.kde.kweather
           - org.kde.skanpage
-
-  # ── Claude Code ──────────────────────────────────────────────────────────
-  # Official curl installer; script relocates binary from /usr/local/bin to
-  # /usr/bin/ so it survives ostree deployment (local/ is a runtime overlay).
-  - type: script
-    scripts:
-      - install-claude-code.sh
-
-  # ── Gemini CLI ────────────────────────────────────────────────────────────
-  # npm install with --prefix /usr puts the binary in /usr/bin/ directly.
-  - type: script
-    scripts:
-      - install-gemini-cli.sh
 
   # ── Build patched niri_window_buttons waybar module ──────────────────────
   # Patch centers icon in highlight box when show_window_titles=false.
