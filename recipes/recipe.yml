@@ -127,8 +127,7 @@ modules:
         - swaylock
         - swayidle
         - swaybg
-        # - fuzzel
-        - rofi
+        - fuzzel
         - SwayNotificationCenter
         - wlsunset
         - kanshi
