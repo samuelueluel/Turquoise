@@ -318,12 +318,8 @@ modules:
         # kf6-kwallet / kf6-kwallet-pam: removed — no PAM auto-unlock in Fedora 43 and gnome-keyring covers the use case
         # - python3               # already in base-main
         # - python3-evdev         # already in base-main
-        - nodejs # required for Gemini CLI and Claude Code
-        - nodejs-npm # required for Gemini CLI installation
         # - os-prober             # already in base-main
         # - cosign               # already in base-main
-        - gcc # homebrew dependency?
-        - make # homebrew dependency?
         - libxcrypt-compat # homebrew dependency?
 
   # ── Homebrew Framework ─────────────────────────────────────────────────────

@@ -102,7 +102,8 @@ bash ~/work-image/setup-dotfiles.sh
 This script automates the core setup:
 - Deploys dotfiles via `chezmoi apply`.
 - Configures Vivaldi profiles and cleans up conflicting launchers.
-- Creates a **Distrobox** container (`dev-box`) and installs Node.js, Claude Code, and Gemini CLI inside it.
+- Initializes Homebrew, installs `gcc` for the developer toolchain, and installs Gemini CLI natively.
+- Creates a **Distrobox** container (`dev-box`) for other isolated work.
 - Sets Zsh as the default shell.
 
 Log out and back in — this activates your new environment.
@@ -111,7 +112,7 @@ Log out and back in — this activates your new environment.
 
 ## 7. Authenticate Claude and Gemini
 
-Because Claude and Gemini run inside the Distrobox container (via Zsh aliases), you can authenticate them normally:
+Because Claude and Gemini are now installed natively on the host via Homebrew, you can authenticate them normally:
 ```bash
 claude   # browser-based login on first run
 gemini   # browser OAuth on first run

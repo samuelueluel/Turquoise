@@ -27,6 +27,7 @@ mkdir -p \
     ~/.config \
     ~/.gnome2/accels \
     ~/.claude \
+    ~/.gemini \
     ~/.ssh \
     ~/.npm-global/bin
 
@@ -65,7 +66,29 @@ if [[ -d "$HOME/system_config_git/vivaldi" ]]; then
     cp ~/system_config_git/vivaldi/llm/contextmenu.json    ~/.config/vivaldi-llm/Default/ 2>/dev/null || true
 fi
 
-# ── 5. Create Distrobox Dev Environment ──────────────────────────────────────
+# ── 5. Fix Homebrew Installation & Install Packages (Host) ───────────────
+echo "Fixing Homebrew installation (requires password)..."
+# Force extraction of Homebrew to /home on atomic desktops
+sudo rm -f /etc/.linuxbrew
+sudo systemctl start brew-setup.service || true
+
+# Fix ownership of Homebrew
+sudo chown -R "$(whoami):$(id -g)" /home/linuxbrew
+
+echo "Installing Homebrew packages..."
+# Make sure brew is available in this subshell
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Install gcc and make for isolated developer toolchain
+brew install gcc make
+
+# Install gemini-cli
+brew install gemini-cli
+
+# Install claude-code
+brew install --cask claude-code
+
+# ── 6. Create Distrobox Dev Environment ──────────────────────────────────────
 echo "Setting up Distrobox dev-box..."
 if ! distrobox list | grep -q "dev-box"; then
     distrobox create -Y -n dev-box -i registry.fedoraproject.org/fedora-toolbox:43
