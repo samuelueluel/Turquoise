@@ -52,7 +52,7 @@ rm -f ~/.local/share/applications/com.vivaldi.Vivaldi.*.desktop || true
 # ── 4.6. Copy Vivaldi Preferences ────────────────────────────────────────────
 if [[ -d "$HOME/system_config_git/vivaldi" ]]; then
     echo "Copying Vivaldi preferences..."
-    
+
     mkdir -p ~/.config/vivaldi-casual/Default
     cp ~/system_config_git/vivaldi/casual/Preferences      ~/.config/vivaldi-casual/Default/ 2>/dev/null || true
     cp ~/system_config_git/vivaldi/casual/contextmenu.json ~/.config/vivaldi-casual/Default/ 2>/dev/null || true
@@ -86,7 +86,7 @@ brew install gcc make
 brew install gemini-cli
 
 # Install claude-code
-brew install --cask claude-code
+brew install --cask claude-code # note this is the "stable" release in Homebrew; see claude-code latest
 
 # ── 6. Refresh desktop file MIME database ────────────────────────────────────
 update-desktop-database ~/.local/share/applications/ 2>/dev/null || true

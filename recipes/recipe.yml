@@ -127,9 +127,9 @@ modules:
       install-weak-deps: false
       packages:
         - waybar
-        - xdg-desktop-portal-gtk
+        - xdg-desktop-portal-gtk # think already in base-main
         - xdg-desktop-portal-gnome # screencasting — Niri uses Smithay, not wlroots
-        - xwayland-satellite
+        - xwayland-satellite # think already in base-main
         - swaylock
         - swayidle
         - swaybg
@@ -142,14 +142,14 @@ modules:
         - wl-clipboard # think already in base-main
         - polkit-kde
         - xdg-user-dirs
-        - xdg-utils
+        - xdg-utils # think already in base-main
         - gtk4-layer-shell
         - network-manager-applet
         # hyprpicker: not in Fedora repos — add via script if needed
         - libappindicator-gtk3
         - copyq
         - nirius # Niri IPC scripting tool, from Terra
-        - jq # JSON parsing for Waybar/Niri IPC scripts
+        - jq # JSON parsing for Waybar/Niri IPC scripts — think already in base-main
         - socat # IPC socket listener for Niri event-driven Waybar updates
         - pamixer # CLI volume control for Waybar scroll/click actions
         - swayosd # OSD popups for volume/brightness/capslock changes
@@ -175,12 +175,12 @@ modules:
         - zsh
         - zsh-autosuggestions
         - zsh-syntax-highlighting
-        - bash-completion
+        - bash-completion # think already in base-main
         - fzf # think already in base-main
         - zoxide
-        - nano
+        - nano # think already in base-main
         # nano-syntax-highlighting: not in Fedora repos
-        - less
+        - less # think already in base-main
 
   # ── File management ───────────────────────────────────────────────────────
   # yazi installed via script (not in Fedora repos)
@@ -193,7 +193,7 @@ modules:
         - udiskie
         - trash-cli
         - unrar
-        - unzip
+        - unzip # think already in base-main
         - p7zip
         - gvfs-mtp
         - gvfs-gphoto2
@@ -201,26 +201,26 @@ modules:
         - gvfs-nfs
         - gvfs-fuse
         - gvfs-archive
-        - ntfs-3g
-        - exfatprogs
-        - dosfstools
-        - nfs-utils
-        - xfsprogs # XFS filesystem tools
+        - ntfs-3g # think already in base-main
+        - exfatprogs # think already in base-main
+        - dosfstools # think already in base-main
+        - nfs-utils # think already in base-main
+        - xfsprogs # XFS filesystem tools — think already in base-main
 
   # ── Audio ─────────────────────────────────────────────────────────────────
   - type: dnf
     install:
       install-weak-deps: false
       packages:
-        - pipewire-alsa
-        - pipewire-jack-audio-connection-kit # JACK compat (Fedora name for pipewire-jack)
-        - pipewire-pulse
-        - wireplumber
-        - rtkit
+        - pipewire-alsa # think already in base-main
+        - pipewire-jack-audio-connection-kit # JACK compat (Fedora name for pipewire-jack) — think already in base-main
+        - pipewire-pulse # think already in base-main
+        - wireplumber # think already in base-main
+        - rtkit # think already in base-main
         - alsa-firmware # think already in base-main
-        - alsa-utils
-        - alsa-sof-firmware # Sound Open Firmware (Fedora name for sof-firmware)
-        - pipewire-gstreamer
+        - alsa-utils # think already in base-main
+        - alsa-sof-firmware # Sound Open Firmware (Fedora name for sof-firmware) — think already in base-main
+        - pipewire-gstreamer # think already in base-main
         - lsp-plugins-lv2 # LV2 audio plugins for host JACK apps
 
   # ── Hardware + power ──────────────────────────────────────────────────────
@@ -229,22 +229,22 @@ modules:
       install-weak-deps: false
       packages:
         - brightnessctl
-        - bluez
+        - bluez # think already in base-main
         - blueman
         - bluez-tools
-        - upower
+        - upower # think already in base-main
         - power-profiles-daemon
-        - fwupd
+        - fwupd # think already in base-main
         - fprintd # fingerprint daemon
         - fprintd-pam # provides pam_fprintd.so; satisfies PAM fingerprint stack
         - keyd
-        - playerctl
-        - ModemManager
-        - mesa-vulkan-drivers # includes AMD Radeon Vulkan (ThinkPad P14s)
+        - playerctl # think already in base-main
+        - ModemManager # think already in base-main
+        - mesa-vulkan-drivers # includes AMD Radeon Vulkan (ThinkPad P14s) — think already in base-main
         # - mesa-va-drivers       # already in base-main (ublue upgrades it)
         # - libva-utils           # already in base-main
         - mesa-demos # glxinfo, eglinfo etc.
-        - thermald # thermal management
+        - thermald # thermal management — think already in base-main
 
   # ── Networking infrastructure ──────────────────────────────────────────────
   - type: dnf
@@ -255,12 +255,12 @@ modules:
         - NetworkManager-openconnect
         - NetworkManager-openvpn-gnome
         - NetworkManager-openconnect-gnome
-        - avahi
-        - nss-mdns
-        - dnsmasq # used by libvirt for VM networking
-        - openssh
-        - wget
-        - wireless-regdb
+        - avahi # think already in base-main
+        - nss-mdns # think already in base-main
+        - dnsmasq # used by libvirt for VM networking — think already in base-main
+        - openssh # think already in base-main
+        - wget # think already in base-main
+        - wireless-regdb # think already in base-main
         - firewall-config
         - firewall-applet
 
@@ -269,8 +269,8 @@ modules:
     install:
       install-weak-deps: false
       packages:
-        - cups
-        - cups-browsed
+        - cups # think already in base-main
+        - cups-browsed # think already in base-main
 
   # ── Media ─────────────────────────────────────────────────────────────────
   # mpv stays in base (needed by yazi for video previews)
@@ -282,15 +282,15 @@ modules:
         - swayimg # Wayland image viewer
         - yt-dlp
         - ffmpeg # think already in base-main
-        - gstreamer1-plugin-libav
+        - gstreamer1-plugin-libav # think already in base-main
         - gstreamer1-vaapi
-        - gstreamer1-plugins-good
-        - gstreamer1-plugins-bad-free
+        - gstreamer1-plugins-good # think already in base-main
+        - gstreamer1-plugins-bad-free # think already in base-main
         - gstreamer1-plugins-ugly
         - libdvdcss # from RPM Fusion nonfree-tainted
         - libopenraw
-        - libgsf
-        - poppler-glib
+        - libgsf # think already in base-main
+        - poppler-glib # think already in base-main
 
   # ── System utilities ───────────────────────────────────────────────────────
   - type: dnf
@@ -329,6 +329,10 @@ modules:
         - python3-evdev # think already in base-main
         - os-prober # think already in base-main
         # - cosign               # already in base-main (pinned version from GitHub releases — do not install via dnf)
+        # - curl                 # already in base-main
+        # - gcc                  # already in base-main; pulled in by build scripts (nwg-look, niri-window-buttons)
+        # - checkpolicy          # already in base-main; used by setup-selinux.sh
+        # - policycoreutils      # already in base-main; used by setup-selinux.sh
         - libxcrypt-compat # homebrew dependency that must be on system
 
   # ── Homebrew Framework ─────────────────────────────────────────────────────
@@ -355,7 +359,7 @@ modules:
         - freetype-freeworld # subpixel hinting + LCD filtering (better than stock Fedora FreeType)
         - ibm-plex-sans-fonts # full family: Light, Regular, SemiBold, Bold, etc.
         - ibm-plex-mono-fonts
-        - google-noto-emoji-fonts
+        - google-noto-emoji-fonts # think already in base-main
         - google-noto-sans-fonts
         - google-noto-serif-fonts
         - google-noto-sans-cjk-fonts # think already in base-main
@@ -469,6 +473,24 @@ modules:
   - type: script
     scripts:
       - install-msfonts.sh
+
+  # ── Clean up build-script toolchain residue ──────────────────────────────
+  # Build scripts remove their primary packages but dnf does not auto-remove
+  # orphaned deps. These were pulled in transitively and are not needed at runtime:
+  #   rust-std-static, binutils, cpp  ← deps of cargo/rust (build-niri-window-buttons.sh)
+  #   golang-bin, golang-src, go-filesystem, make  ← deps of golang (install-nwg-look.sh)
+  #   cabextract  ← installed by install-msfonts.sh, never removed
+  - type: dnf
+    remove:
+      packages:
+        - rust-std-static
+        - binutils
+        - cpp
+        - golang-bin
+        - golang-src
+        - go-filesystem
+        - make
+        - cabextract
 
   # ── Configure greetd + gtkgreet ───────────────────────────────────────────
   - type: script
