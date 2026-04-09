@@ -420,10 +420,8 @@ modules:
           - md.obsidian.Obsidian
           - com.bitwarden.desktop
           - org.kde.okular
-          - com.github.jeromerobert.pdfarranger
-          - org.gnumeric.Gnumeric
+          - org.onlyoffice.desktopeditors
           - org.gnome.meld
-          - com.abisource.AbiWord # for opening Word files
           - org.texstudio.TeXstudio # bundles TeXLive
           # Audio/media
           - com.github.wwmm.easyeffects
