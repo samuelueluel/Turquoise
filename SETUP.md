@@ -114,7 +114,7 @@ Some application data is too large or specific for Chezmoi/automation:
   ```bash
   cp -r ~/system_config_git/Wallpapers ~/Pictures/Wallpapers
   ```
-- **Okular (Flatpak):**
+- **Okular (Flatpak) PROBABLY DONT DO THIS:**
   ```bash
   # Launch once to create sandbox, then copy config
   flatpak run org.kde.okular & sleep 2 && kill $!
