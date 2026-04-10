@@ -417,6 +417,8 @@ modules:
         install:
           # Browsers
           - io.gitlab.librewolf-community
+          # KDE style extensions
+          - org.kde.KStyle.Kvantum//6.10
           # Productivity
           - md.obsidian.Obsidian
           - com.bitwarden.desktop

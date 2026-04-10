@@ -144,3 +144,5 @@ Some application data is too large or specific for Chezmoi/automation:
 flatpak override --user --filesystem=xdg-config/gtk-3.0:ro <app-id>
 ```
 Once verified, add the override to `setup-dotfiles.sh`.
+
+Qt/KDE Flatpaks are much more annoying. Use kvantum?
