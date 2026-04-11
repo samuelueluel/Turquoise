@@ -416,14 +416,13 @@ modules:
           url: https://dl.flathub.org/repo/flathub.flatpakrepo
         install:
           # Browsers
-          - io.gitlab.librewolf-community
           # KDE style extensions
           - org.kde.KStyle.Kvantum//6.10
           # Productivity
           - md.obsidian.Obsidian
           - com.bitwarden.desktop
           - org.kde.okular
-          - org.onlyoffice.desktopeditors
+          - org.libreoffice.LibreOffice
           - org.gnome.meld
           - org.texstudio.TeXstudio # bundles TeXLive
           # Audio/media
@@ -482,6 +481,11 @@ modules:
   - type: script
     scripts:
       - build-nirius.sh
+
+  # ── Install Zen Browser (Native Binary) ──────────────────────────────────
+  - type: script
+    scripts:
+      - install-zen-browser.sh
 
   # ── Build patched niri_window_buttons waybar module ──────────────────────
   # Patch centers icon in highlight box when show_window_titles=false.

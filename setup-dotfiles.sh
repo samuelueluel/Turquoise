@@ -66,6 +66,35 @@ if [[ -d "$HOME/system_config_git/vivaldi" ]]; then
     cp ~/system_config_git/vivaldi/llm/contextmenu.json    ~/.config/vivaldi-llm/Default/ 2>/dev/null || true
 fi
 
+# ── 4.6.5. Create Zen Browser Profiles & Launchers ──────────────────────────
+if command -v zen-browser &> /dev/null; then
+    echo "Creating Zen Browser profiles..."
+    zen-browser -CreateProfile "personal" || true
+    zen-browser -CreateProfile "utility"  || true
+    zen-browser -CreateProfile "work"     || true
+
+    echo "Generating Zen Browser launchers..."
+    declare -A ICONS=( ["personal"]="a7xpg" ["utility"]="braindump" ["work"]="applications-office" )
+    for profile in personal utility work; do
+        NAME="Zen (${profile^})"
+        ICON="${ICONS[$profile]}"
+        FILE="$HOME/.local/share/applications/zen-${profile}.desktop"
+        
+        cat <<EOF > "$FILE"
+[Desktop Entry]
+Name=$NAME
+Comment=Launch Zen Browser with the ${profile^} profile
+Exec=env MOZ_APP_REMOTINGNAME=zen-$profile zen-browser -P "$profile" --new-instance
+Icon=$ICON
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+StartupWMClass=zen-$profile
+EOF
+        chmod +x "$FILE"
+    done
+fi
+
 # ── 4.7. Restore Claude and Gemini settings ──────────────────────────────────
 if [[ -d "$HOME/system_config_git/claude-code" ]]; then
     echo "Restoring Claude Code settings..."
