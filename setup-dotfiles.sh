@@ -46,32 +46,30 @@ fi
 echo "Applying dotfiles via chezmoi..."
 chezmoi apply --force
 
-# ── 4.5. Clean up conflicting Vivaldi generated desktop files ────────────────
-rm -f ~/.local/share/applications/com.vivaldi.Vivaldi.*.desktop || true
-
-# ── 4.6. Copy Vivaldi Preferences ────────────────────────────────────────────
-if [[ -d "$HOME/system_config_git/vivaldi" ]]; then
-    echo "Copying Vivaldi preferences..."
-
-    mkdir -p ~/.config/vivaldi-casual/Default
-    cp ~/system_config_git/vivaldi/casual/Preferences      ~/.config/vivaldi-casual/Default/ 2>/dev/null || true
-    cp ~/system_config_git/vivaldi/casual/contextmenu.json ~/.config/vivaldi-casual/Default/ 2>/dev/null || true
-
-    mkdir -p ~/.config/vivaldi-work/Default
-    cp ~/system_config_git/vivaldi/work/Preferences        ~/.config/vivaldi-work/Default/ 2>/dev/null || true
-    cp ~/system_config_git/vivaldi/work/contextmenu.json   ~/.config/vivaldi-work/Default/ 2>/dev/null || true
-
-    mkdir -p ~/.config/vivaldi-llm/Default
-    cp ~/system_config_git/vivaldi/llm/Preferences         ~/.config/vivaldi-llm/Default/ 2>/dev/null || true
-    cp ~/system_config_git/vivaldi/llm/contextmenu.json    ~/.config/vivaldi-llm/Default/ 2>/dev/null || true
-fi
-
-# ── 4.6.5. Create Zen Browser Profiles & Launchers ──────────────────────────
+# ── 4.6. Create Zen Browser Profiles & Launchers ────────────────────────────
 if command -v zen-browser &> /dev/null; then
     echo "Creating Zen Browser profiles..."
-    zen-browser -CreateProfile "personal" || true
-    zen-browser -CreateProfile "utility"  || true
-    zen-browser -CreateProfile "work"     || true
+    # Use explicit paths so we know exactly where to restore settings.
+    # Syntax: -CreateProfile "name /absolute/path"
+    ZEN_DIR="$HOME/.config/zen"
+    zen-browser -CreateProfile "personal $ZEN_DIR/zen.personal" 2>/dev/null || true
+    zen-browser -CreateProfile "utility $ZEN_DIR/zen.utility"  2>/dev/null || true
+    zen-browser -CreateProfile "work $ZEN_DIR/zen.work"        2>/dev/null || true
+
+    # ── Restore settings to all profiles ─────────────────────────────────────
+    if [[ -d "$HOME/system_config_git/zen/personal" ]]; then
+        echo "Restoring Zen profile settings..."
+        SRC="$HOME/system_config_git/zen/personal"
+        for profile in zen.personal zen.utility zen.work; do
+            DEST="$ZEN_DIR/$profile"
+            mkdir -p "$DEST/chrome"
+            cp "$SRC/user.js"                    "$DEST/" 2>/dev/null || true
+            cp "$SRC/zen-keyboard-shortcuts.json" "$DEST/" 2>/dev/null || true
+            cp "$SRC/zen-themes.json"             "$DEST/" 2>/dev/null || true
+            cp "$SRC/chrome/zen-themes.css"       "$DEST/chrome/" 2>/dev/null || true
+            cp -r "$SRC/chrome/zen-themes"        "$DEST/chrome/" 2>/dev/null || true
+        done
+    fi
 
     echo "Generating Zen Browser launchers..."
     declare -A ICONS=( ["personal"]="a7xpg" ["utility"]="braindump" ["work"]="applications-office" )
@@ -79,7 +77,7 @@ if command -v zen-browser &> /dev/null; then
         NAME="Zen (${profile^})"
         ICON="${ICONS[$profile]}"
         FILE="$HOME/.local/share/applications/zen-${profile}.desktop"
-        
+
         cat <<EOF > "$FILE"
 [Desktop Entry]
 Name=$NAME

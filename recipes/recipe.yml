@@ -333,7 +333,7 @@ modules:
         - tldr
         - man-db # think already in base-main
         - hwinfo
-        # gnome-keyring (from base-main) handles org.freedesktop.secrets for Vivaldi/Chromium
+        # gnome-keyring (from base-main) handles org.freedesktop.secrets for browser password storage
         # kf6-kwallet / kf6-kwallet-pam: removed — no PAM auto-unlock in Fedora 43 and gnome-keyring covers the use case
         - python3 # think already in base-main
         - python3-evdev # think already in base-main
@@ -392,19 +392,6 @@ modules:
       packages:
         - virt-manager
 
-  # ── Web Browsers ──────────────────────────────────────────────────────────
-  - type: dnf
-    repos:
-      files:
-        - https://repo.vivaldi.com/archive/vivaldi-fedora.repo
-    install:
-      install-weak-deps: false
-      packages:
-        - vivaldi-stable
-
-  - type: script
-    scripts:
-      - update-vivaldi-ffmpeg.sh
 
   # ── Flatpaks ──────────────────────────────────────────────────────────────
   - type: default-flatpaks

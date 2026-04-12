@@ -15,7 +15,7 @@ cat ~/.ssh/id_ed25519      # Copy this → Bitwarden secure note: "SSH Private K
 cat ~/.ssh/id_ed25519.pub  # Copy this → Bitwarden secure note: "SSH Public Key"
 ```
 
-Include the full content, including header and footer lines for the private key. You'll retrieve these from bitwarden.com on first boot using Vivaldi, which is baked into the image.
+Include the full content, including header and footer lines for the private key. You'll retrieve these from bitwarden.com on first boot using Zen Browser, which is baked into the image.
 
 ---
 
@@ -48,7 +48,7 @@ Niri starts with built-in defaults until dotfiles are applied.
 - **WiFi:** If not connected, run `nmtui`.
 
 ### Restore SSH Keys
-Open Vivaldi (already in the image), log into Bitwarden, and restore your keys:
+Open Zen Browser (already in the image), log into Bitwarden, and restore your keys:
 
 ```bash
 mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -90,7 +90,7 @@ bash ~/samuel-niri/setup-dotfiles.sh
 **What this script handles:**
 - **Dotfiles:** Deploys via `chezmoi apply`.
 - **Zsh:** Installs Powerlevel10k/fzf-tab and sets Zsh as the default shell.
-- **Vivaldi:** Configures Casual, Work, and LLM profiles with preferences from `system_config_git`.
+- **Zen Browser:** Creates Personal, Utility, and Work profiles and restores settings from `system_config_git/zen/`.
 - **Dev Tools:** Installs Homebrew, GCC, Gemini CLI, Claude Code, `rtk`, and `bbrew`.
 - **Theming:** Applies Flatpak overrides for theme access.
 
@@ -106,6 +106,13 @@ claude   # browser-based login
 gemini   # browser OAuth
 dropbox start -i  # sign in via tray
 ```
+
+### Zen Browser — Manual Steps
+Settings, keybindings, and mods are restored automatically by the setup script. Extensions must be installed manually in each profile:
+- **uBlock Origin** — `https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/`
+- Any other extensions you use
+
+Toolbar button positions are already set in `user.js` and will snap into place once the extensions are installed.
 
 ### Manual Config Restoration
 Some application data is too large or specific for Chezmoi/automation:
