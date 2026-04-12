@@ -82,14 +82,21 @@ if command -v zen-browser &> /dev/null; then
 [Desktop Entry]
 Name=$NAME
 Comment=Launch Zen Browser with the ${profile^} profile
-Exec=env MOZ_APP_REMOTINGNAME=zen-$profile zen-browser -P "$profile" --new-instance
+Exec=env MOZ_APP_REMOTINGNAME=zen-$profile zen-browser --profile "\$ZEN_DIR/zen.$profile" %u
 Icon=$ICON
 Terminal=false
 Type=Application
 Categories=Network;WebBrowser;
 StartupWMClass=zen-$profile
+MimeType=x-scheme-handler/unknown;x-scheme-handler/about;x-scheme-handler/https;x-scheme-handler/http;text/html;
 EOF
         chmod +x "$FILE"
+    done
+
+    echo "Setting Zen Utility as default web browser..."
+    xdg-settings set default-web-browser zen-utility.desktop 2>/dev/null || true
+    for mime in x-scheme-handler/http x-scheme-handler/https text/html application/xhtml+xml application/x-extension-html application/x-extension-shtml application/x-extension-xhtml x-scheme-handler/about x-scheme-handler/unknown; do
+        xdg-mime default zen-utility.desktop "$mime" 2>/dev/null || true
     done
 fi
 
