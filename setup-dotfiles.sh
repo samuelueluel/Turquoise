@@ -46,6 +46,9 @@ fi
 echo "Applying dotfiles via chezmoi..."
 chezmoi apply --force
 
+# Enable user systemd services placed by chezmoi
+systemctl --user enable empty-trash.service battery-notify.service cliphist-wipe.service || true
+
 # ── 4.6. Create Zen Browser Profiles & Launchers ────────────────────────────
 if command -v zen-browser &> /dev/null; then
     echo "Creating Zen Browser profiles..."
