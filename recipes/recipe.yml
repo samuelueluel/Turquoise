@@ -475,6 +475,11 @@ modules:
     scripts:
       - install-zen-browser.sh
 
+  # ── Install Helium Browser (AppImage) ────────────────────────────────────
+  - type: script
+    scripts:
+      - install-helium.sh
+
   # ── Build patched niri_window_buttons waybar module ──────────────────────
   # Patch centers icon in highlight box when show_window_titles=false.
   # Not packaged for Fedora; built from source (Rust).
