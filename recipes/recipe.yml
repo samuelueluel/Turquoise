@@ -251,6 +251,7 @@ modules:
     install:
       install-weak-deps: false
       packages:
+        - NetworkManager-tui
         - NetworkManager-openvpn
         - NetworkManager-openconnect
         - NetworkManager-openvpn-gnome
@@ -333,6 +334,7 @@ modules:
         # glances → homebrew: glances
         # tldr → homebrew: tldr
         - man-db # think already in base-main
+        - htop
         - hwinfo
         # gnome-keyring (from base-main) handles org.freedesktop.secrets for browser password storage
         # kf6-kwallet / kf6-kwallet-pam: removed — no PAM auto-unlock in Fedora 43 and gnome-keyring covers the use case
