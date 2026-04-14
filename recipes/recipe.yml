@@ -518,6 +518,12 @@ modules:
     scripts:
       - install-msfonts.sh
 
+  # ── Build bluetuith from source ──────────────────────────────────────────
+  # Not in Fedora repos or Homebrew; built with Go toolchain.
+  - type: script
+    scripts:
+      - build-bluetuith.sh
+
   # ── Remove build-time toolchain ──────────────────────────────────────────
   # Remove everything installed by the pre-build block above, plus transitive
   # deps that dnf pulled in but won't auto-remove:
