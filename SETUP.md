@@ -26,6 +26,8 @@ During the Fedora Silverblue installer (Anaconda):
 - **User Account:** Set username to **`samuel`** (crucial, as Niri/Chezmoi configs have hardcoded `/home/samuel/` paths).
 - **Network:** Connect to WiFi during install (the profile persists to the installed system).
 
+**Secure Boot:** Disable Secure Boot in BIOS firmware before rebooting into the custom image. The image uses the `@kernel-vanilla/stable` upstream kernel, which cannot be signed for Secure Boot.
+
 ---
 
 ## 3. Image Rebase
@@ -37,7 +39,7 @@ rpm-ostree rebase ostree-unverified-registry:ghcr.io/samuelueluel/samuel-niri:la
 systemctl reboot
 ```
 
-This pulls the full image (~3–5 GB). After reboot, you will land at the **tuigreet** login screen, which starts **Niri**.
+This pulls the full image (~3–5 GB). After reboot, you will land at the **gtkgreet** login screen, which starts **Niri**.
 
 ---
 
@@ -49,7 +51,7 @@ Niri starts with built-in defaults until dotfiles are applied.
 - **File browsing:** Use **Nemo** for any file browsing at this stage. Yazi depends on Homebrew CLI tools (`fd`, `rg`, `bat`, `eza`) that aren't available until step 6, so search and previews won't work correctly beforehand.
 
 ### Restore SSH Keys
-Open Zen Browser (already in the image), log into Bitwarden, and restore your keys:
+Open Zen Browser (already in the image), log into bitwarden.com, and restore your keys:
 
 ```bash
 mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -88,14 +90,18 @@ Run the setup script to automate the bulk of the user-level configuration.
 bash ~/samuel-niri/setup-dotfiles.sh
 ```
 
-**What this script handles:**
-- **Dotfiles:** Deploys via `chezmoi apply`.
-- **Zsh:** Installs Powerlevel10k/fzf-tab and sets Zsh as the default shell.
-- **Zen Browser:** Creates Personal, Utility, and Work profiles and restores settings from `system_config_git/zen/`.
-- **Dev Tools:** Installs Homebrew packages from `~/.Brewfile` (CLI tools: bat, eza, ripgrep, lazygit, etc.), plus GCC, Gemini CLI, Claude Code, `rtk`, and `bbrew`.
-- **Theming:** Applies Flatpak overrides for theme access.
+The script will prompt for your **sudo password** twice: once to start `brew-setup.service` (which extracts Homebrew to `/home/linuxbrew`) and once to change the default shell to Zsh.
 
-**Log out and back in** to activate the new shell and environment settings. This is required for Homebrew to be injected into the systemd user session PATH. Note that Yazi search (`fd`, `rg`, fzf plugins) relies on Homebrew tools; to ensure these are always available regardless of how it's launched, the Niri keybinds wrap Yazi in a shell command (`zsh -c 'exec yazi'`).
+**What this script handles:**
+- **Dotfiles:** Deploys via `chezmoi apply`, pre-creating all required directories.
+- **Zsh:** Clones Powerlevel10k and fzf-tab plugins, then sets Zsh as the default shell.
+- **Zen Browser:** Creates `personal`, `utility`, and `work` profiles and restores settings (keybindings, themes, `user.js`) from `system_config_git/zen/`.
+- **Claude Code + Gemini CLI:** Restores `settings.json` for both from `system_config_git/`.
+- **Dev Tools:** Installs Homebrew packages from `~/.Brewfile` (CLI tools: `bat`, `eza`, `ripgrep`, `lazygit`, etc.), plus `gcc`, `make`, Gemini CLI, Claude Code, `rtk` (with hooks initialized for both Claude and Gemini), and `bbrew`.
+- **Flatpak Overrides:** Grants Quod Libet and pwvucontrol read access to GTK theme config for Noctalia theming.
+- **Systemd user services:** Enables `empty-trash`, `battery-notify`, `cliphist-wipe`, and `distrobox-upgrade`.
+
+**Log out and back in** after the script completes to activate the new shell and inject Homebrew into the systemd user session PATH.
 
 ---
 
@@ -122,18 +128,51 @@ Some application data is too large or specific for Chezmoi/automation:
   ```bash
   cp -r ~/system_config_git/Wallpapers ~/Pictures/Wallpapers
   ```
-- **Okular (Flatpak) PROBABLY DONT DO THIS:**
-  ```bash
-  # Launch once to create sandbox, then copy config
-  flatpak run org.kde.okular & sleep 2 && kill $!
-  mkdir -p ~/.var/app/org.kde.okular/config
-  cp ~/system_config_git/okular/.config/okularrc ~/.var/app/org.kde.okular/config/okularrc
-  ```
 - **EasyEffects:** Open the app to confirm presets (applied by Chezmoi) have loaded correctly.
 
 ---
 
-## 8. System Reference: Noctalia Theme
+## 8. Post-Setup System Configuration
+
+### Swap (16GB Swap File)
+
+By default, Fedora uses an 8GB zRAM device. Replace it with a 16GB file on `/var` for workloads that need more physical swap space.
+
+Check current swap status first:
+```bash
+swapon --show
+```
+If you see `/dev/zram0`, zRAM is active. If you see `/var/swapfile`, it's already set up.
+
+To create the swap file:
+
+1. **Disable zRAM:**
+   ```bash
+   sudo touch /etc/systemd/zram-generator.conf
+   sudo swapoff /dev/zram0
+   ```
+
+2. **Create and activate the swap file:**
+   ```bash
+   sudo fallocate -l 16G /var/swapfile
+   sudo chmod 600 /var/swapfile
+   sudo mkswap /var/swapfile
+   sudo swapon /var/swapfile
+   ```
+
+3. **Persist across reboots** — add to `/etc/fstab` if not already present:
+   ```text
+   /var/swapfile none swap defaults 0 0
+   ```
+
+Verify:
+```bash
+swapon --show
+```
+
+---
+
+## 9. System Reference: Noctalia Theme
 
 **Noctalia** is the custom system-wide color palette. It is applied per-application via Chezmoi-managed config files.
 
