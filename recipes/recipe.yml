@@ -412,6 +412,17 @@ modules:
       packages:
         - virt-manager
 
+  # ── Android (Waydroid) ────────────────────────────────────────────────────
+  # Binder is built into the vanilla kernel (CONFIG_ANDROID_BINDER_IPC=y).
+  # waydroid-container.service manages the Android container; run
+  # `sudo waydroid init` on first boot to download the Android system image.
+  - type: dnf
+    install:
+      install-weak-deps: false
+      packages:
+        - waydroid
+        - lzip # needed by waydroid-script (ARM translation + GAPPS installer)
+
 
   # ── Flatpaks ──────────────────────────────────────────────────────────────
   - type: default-flatpaks
@@ -589,6 +600,7 @@ modules:
         - greetd.service
         - bluetooth.service
         - libvirtd.service
+        - waydroid-container.service
         - keyd.service
         - power-profiles-daemon.service
         - thermald.service
