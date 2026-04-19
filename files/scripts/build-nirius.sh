@@ -10,7 +10,7 @@ trap "rm -rf '$BUILD_DIR'" EXIT
 
 # Build-time deps (cargo, rust) are pre-installed by the recipe's build-toolchain block.
 
-curl -sL "$TARBALL_URL" | tar -xz -C "$BUILD_DIR"
+curl -fsSL --retry 3 --retry-delay 5 "$TARBALL_URL" | tar -xz -C "$BUILD_DIR"
 
 cd "$BUILD_DIR/nirius-nirius-${VERSION}"
 cargo build --release
