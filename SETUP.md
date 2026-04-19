@@ -99,7 +99,7 @@ The script will prompt for your **sudo password** twice: once to start `brew-set
 - **Claude Code + Gemini CLI:** Restores `settings.json` for both from `system_config_git/`.
 - **Dev Tools:** Installs Homebrew packages from `~/.Brewfile` (CLI tools: `bat`, `eza`, `ripgrep`, `lazygit`, etc.), plus `gcc`, `make`, Gemini CLI, Claude Code, `rtk` (with hooks initialized for both Claude and Gemini), and `bbrew`.
 - **Flatpak Overrides:** Grants Quod Libet and pwvucontrol read access to GTK theme config for Noctalia theming.
-- **Systemd user services:** Enables `empty-trash`, `battery-notify`, `cliphist-wipe`, and `distrobox-upgrade`.
+- **Systemd user services:** Enables `empty-trash`, `battery-notify`, and `cliphist-wipe`.
 
 **Log out and back in** after the script completes to activate the new shell and inject Homebrew into the systemd user session PATH.
 

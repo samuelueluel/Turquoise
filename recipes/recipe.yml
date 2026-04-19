@@ -623,5 +623,4 @@ modules:
         - pipewire-pulse.service
         - wireplumber.service
       disabled:
-        - distrobox-upgrade.timer
         - flatpak-user-update.timer
