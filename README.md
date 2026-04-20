@@ -1,9 +1,9 @@
-Personal atomic image built with [BlueBuild](https://github.com/blue-build/) and based on the [Universal Blue main image](https://github.com/ublue-os/main). Uses the [niri compositor](https://github.com/niri-wm/niri). Opinionated. Work in progress.
+Personal atomic image built with [BlueBuild](https://github.com/blue-build/) and based on the [Universal Blue main image](https://github.com/ublue-os/main). Uses the [niri compositor](https://github.com/niri-wm/niri). Opinionated. Work in progress. Full documentation not provided. Use at your own risk.
 
 Some but not all of my personal configuration/dotfiles are applied upon install, namely, niri + waybar + fuzzel. To verify that things work, and to familiarize yourself with the (perhaps idiosyncratic) custom keybinds before installing, you should boot into Fedora Silverblue on a VM and then rebase to this image with
 
 ```bash
-bootc switch ghcr.io/samuelueluel/samuel-niri:latest
+sudo bootc switch ghcr.io/samuelueluel/samuel-niri:latest
 systemctl reboot
 ```
 

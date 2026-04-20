@@ -601,7 +601,7 @@ modules:
       enabled:
         - greetd.service
         - bluetooth.service
-        - libvirtd.service
+        - libvirtd.socket
         - waydroid-container.service
         - keyd.service
         - power-profiles-daemon.service

@@ -151,14 +151,20 @@ curl -L "https://github.com/Valkyrie00/bold-brew/releases/download/v${BBREW_VERS
 # ── 9. Refresh desktop file MIME database ────────────────────────────────────
 update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
-# ── 10. Set zsh as default shell ─────────────────────────────────────────────
+# ── 10. Add user to libvirt group (for Virtual Machine Manager) ──────────────
+if ! groups "$(whoami)" | grep -q '\blibvirt\b'; then
+    echo "Adding $(whoami) to libvirt group (requires password)..."
+    sudo usermod -aG libvirt "$(whoami)"
+fi
+
+# ── 11. Set zsh as default shell ─────────────────────────────────────────────
 ZSH_PATH="$(command -v zsh)"
 if [[ "$SHELL" != "$ZSH_PATH" ]]; then
     echo "Setting zsh as default shell (requires password)..."
     sudo usermod -s "$ZSH_PATH" "$(whoami)"
 fi
 
-# ── 11. Flatpak Overrides (Theme Access) ─────────────────────────────────────
+# ── 12. Flatpak Overrides (Theme Access) ─────────────────────────────────────
 echo "Applying Flatpak overrides for Quod Libet and pwvucontrol theme access..."
 # gtk-3.0: Quod Libet needs access to gtk.css + noctalia.css for GTK3 theming
 flatpak override --user --filesystem=xdg-config/gtk-3.0:ro io.github.quodlibet.QuodLibet || true
