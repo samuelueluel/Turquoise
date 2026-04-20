@@ -225,6 +225,7 @@ modules:
         - dosfstools # think already in base-main
         - nfs-utils # think already in base-main
         - xfsprogs # XFS filesystem tools — think already in base-main
+        - xfsprogs-xfs_scrub # online XFS metadata scrubber + systemd units
 
   # ── Audio ─────────────────────────────────────────────────────────────────
   - type: dnf
@@ -609,6 +610,7 @@ modules:
         - avahi-daemon.service
         - cups.service
         - fstrim.timer
+        - xfs_scrub_all.timer
         - uupd.timer
       disabled:
         - gdm.service
