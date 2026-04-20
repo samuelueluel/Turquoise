@@ -371,7 +371,7 @@ modules:
   # ── Homebrew Framework ─────────────────────────────────────────────────────
   - type: brew
     brew-analytics: false
-    auto-upgrade: false
+    auto-upgrade: false # probably have separate update timer
 
   # ── Themes + appearance ────────────────────────────────────────────────────
   - type: dnf
@@ -425,7 +425,6 @@ modules:
       packages:
         - waydroid
         - lzip # needed by waydroid-script (ARM translation + GAPPS installer)
-
 
   # ── Flatpaks ──────────────────────────────────────────────────────────────
   - type: default-flatpaks

@@ -1,12 +1,10 @@
 # First-Time Setup Guide
 
-Complete walkthrough from a fresh Fedora Silverblue install to a fully working **samuel-niri** system.
-
 !! If someone besides me ever reads this: obviously all this may not apply to you. !!
 
 ---
 
-## 1. Pre-Flight Checklist (Before You Wipe)
+## 1. Before formatting
 
 Save your SSH keys to Bitwarden as secure notes to ensure you can clone your private repositories on the new system.
 
@@ -15,16 +13,16 @@ cat ~/.ssh/id_ed25519      # Copy this → Bitwarden secure note: "SSH Private K
 cat ~/.ssh/id_ed25519.pub  # Copy this → Bitwarden secure note: "SSH Public Key"
 ```
 
-Include the full content, including header and footer lines for the private key. You'll retrieve these from bitwarden.com on first boot using Zen Browser, which is baked into the image.
+Include the full content, including header and footer lines for the private key. You'll retrieve these from bitwarden.com on first boot using Zen Browser.
 
 ---
 
-## 2. OS Installation (Fedora Silverblue)
+## 2. Install Fedora Silverblue 
 
-During the Fedora Silverblue installer (Anaconda):
+During the Fedora Silverblue installer:
 - **Filesystem:** Choose **XFS**.
 - **User Account:** Set username to **`samuel`** (crucial, as Niri/Chezmoi configs have hardcoded `/home/samuel/` paths).
-- **Network:** Connect to WiFi during install (the profile persists to the installed system).
+- **Network:** Connect to WiFi during install.
 
 **Secure Boot:** Disable Secure Boot in BIOS firmware before rebooting into the custom image. The image uses the `@kernel-vanilla/stable` upstream kernel, which cannot be signed for Secure Boot.
 
@@ -32,14 +30,14 @@ During the Fedora Silverblue installer (Anaconda):
 
 ## 3. Image Rebase
 
-After the first boot into stock Silverblue GNOME, open a terminal and rebase to the custom image.
+After the first boot into stock Silverblue, open a terminal and rebase to the custom image.
 
 ```bash
 bootc switch ghcr.io/samuelueluel/samuel-niri:latest
 systemctl reboot
 ```
 
-This pulls the full image (~3–5 GB). After reboot, you will land at the **gtkgreet** login screen, which starts **Niri**.
+This pulls the full image. After reboot, you will land at the **gtkgreet** login screen, which starts **Niri**.
 
 ---
 
@@ -48,10 +46,10 @@ This pulls the full image (~3–5 GB). After reboot, you will land at the **gtkg
 Niri starts with built-in defaults until dotfiles are applied.
 - **Terminal:** Press **`Super+T`** to open Alacritty.
 - **WiFi:** If not connected, run `nmtui`.
-- **File browsing:** Use **Nemo** for any file browsing at this stage. Yazi depends on Homebrew CLI tools (`fd`, `rg`, `bat`, `eza`) that aren't available until step 6, so search and previews won't work correctly beforehand.
+- **File browsing:** Use **Nemo** for any file browsing at this stage. Yazi depends on Homebrew CLI tools that aren't available until step 6, so search and previews won't work correctly beforehand.
 
 ### Restore SSH Keys
-Open Zen Browser (already in the image), log into bitwarden.com, and restore your keys:
+Open Zen Browser, log into bitwarden.com, and restore your keys:
 
 ```bash
 mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -90,14 +88,12 @@ Run the setup script to automate the bulk of the user-level configuration.
 bash ~/samuel-niri/setup-dotfiles.sh
 ```
 
-The script will prompt for your **sudo password** twice: once to start `brew-setup.service` (which extracts Homebrew to `/home/linuxbrew`) and once to change the default shell to Zsh.
-
 **What this script handles:**
 - **Dotfiles:** Deploys via `chezmoi apply`, pre-creating all required directories.
 - **Zsh:** Clones Powerlevel10k and fzf-tab plugins, then sets Zsh as the default shell.
 - **Zen Browser:** Creates `personal`, `utility`, and `work` profiles and restores settings (keybindings, themes, `user.js`) from `system_config_git/zen/`.
 - **Claude Code + Gemini CLI:** Restores `settings.json` for both from `system_config_git/`.
-- **Dev Tools:** Installs Homebrew packages from `~/.Brewfile` (CLI tools: `bat`, `eza`, `ripgrep`, `lazygit`, etc.), plus `gcc`, `make`, Gemini CLI, Claude Code, `rtk` (with hooks initialized for both Claude and Gemini), and `bbrew`.
+- **Dev Tools:** Installs Homebrew packages from `~/.Brewfile`.
 - **Flatpak Overrides:** Grants Quod Libet and pwvucontrol read access to GTK theme config for Noctalia theming.
 - **Systemd user services:** Enables `empty-trash`, `battery-notify`, and `cliphist-wipe`.
 
@@ -115,11 +111,7 @@ dropbox start -i  # sign in via tray
 ```
 
 ### Zen Browser — Manual Steps
-Settings, keybindings, and mods are restored automatically by the setup script. Extensions must be installed manually in each profile:
-- **uBlock Origin** — `https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/`
-- Any other extensions you use
-
-Toolbar button positions are already set in `user.js` and will snap into place once the extensions are installed.
+Settings, keybindings, and mods are restored automatically by the setup script. Extensions must be installed manually in each profile. Custom extensions are in `system_config_git`.
 
 ### Manual Config Restoration
 Some application data is too large or specific for Chezmoi/automation:
@@ -128,7 +120,6 @@ Some application data is too large or specific for Chezmoi/automation:
   ```bash
   cp -r ~/system_config_git/Wallpapers ~/Pictures/Wallpapers
   ```
-- **EasyEffects:** Open the app to confirm presets (applied by Chezmoi) have loaded correctly.
 
 ---
 

@@ -33,7 +33,7 @@ mkdir -p \
 
 chmod 700 ~/.ssh
 
-# ── 3.5. Install Zsh Plugins (Powerlevel10k, fzf-tab) ────────────────────────
+# ── 4. Install Zsh Plugins (Powerlevel10k, fzf-tab) ─────────────────────────
 echo "Installing external zsh plugins..."
 if [[ ! -d ~/.local/share/zsh/plugins/powerlevel10k ]]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.local/share/zsh/plugins/powerlevel10k
@@ -42,14 +42,14 @@ if [[ ! -d ~/.local/share/zsh/plugins/fzf-tab ]]; then
     git clone --depth=1 https://github.com/Aloxaf/fzf-tab ~/.local/share/zsh/plugins/fzf-tab
 fi
 
-# ── 4. Apply dotfiles ─────────────────────────────────────────────────────────
+# ── 5. Apply dotfiles ─────────────────────────────────────────────────────────
 echo "Applying dotfiles via chezmoi..."
 chezmoi apply --force
 
 # Enable user systemd services placed by chezmoi
 systemctl --user enable empty-trash.service battery-notify.service cliphist-wipe.service || true
 
-# ── 4.6. Create Zen Browser Profiles & Launchers ────────────────────────────
+# ── 6. Create Zen Browser Profiles & Launchers ──────────────────────────────
 if command -v zen-browser &> /dev/null; then
     echo "Creating Zen Browser profiles..."
     # Use explicit paths so we know exactly where to restore settings.
@@ -85,7 +85,7 @@ if command -v zen-browser &> /dev/null; then
 [Desktop Entry]
 Name=$NAME
 Comment=Launch Zen Browser with the ${profile^} profile
-Exec=env MOZ_APP_REMOTINGNAME=zen-$profile zen-browser --profile "\$ZEN_DIR/zen.$profile" %u
+Exec=env MOZ_APP_REMOTINGNAME=zen-$profile zen-browser --profile "$ZEN_DIR/zen.$profile" %u
 Icon=$ICON
 Terminal=false
 Type=Application
@@ -103,7 +103,7 @@ EOF
     done
 fi
 
-# ── 4.7. Restore Claude and Gemini settings ──────────────────────────────────
+# ── 7. Restore Claude and Gemini settings ────────────────────────────────────
 if [[ -d "$HOME/system_config_git/claude-code" ]]; then
     echo "Restoring Claude Code settings..."
     mkdir -p ~/.claude
@@ -115,7 +115,7 @@ if [[ -d "$HOME/system_config_git/gemini-cli" ]]; then
     cp ~/system_config_git/gemini-cli/.gemini/settings.json ~/.gemini/settings.json 2>/dev/null || true
 fi
 
-# ── 5. Fix Homebrew Installation & Install Packages (Host) ───────────────
+# ── 8. Fix Homebrew Installation & Install Packages (Host) ───────────────
 echo "Fixing Homebrew installation (requires password)..."
 # Force extraction of Homebrew to /home on atomic desktops
 sudo rm -f /etc/.linuxbrew
@@ -148,17 +148,17 @@ curl -L "https://github.com/Valkyrie00/bold-brew/releases/download/v${BBREW_VERS
     | tar -xz -C /tmp \
     && mv /tmp/bbrew "$(brew --prefix)/bin/bbrew"
 
-# ── 6. Refresh desktop file MIME database ────────────────────────────────────
+# ── 9. Refresh desktop file MIME database ────────────────────────────────────
 update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
-# ── 7. Set zsh as default shell ──────────────────────────────────────────────
+# ── 10. Set zsh as default shell ─────────────────────────────────────────────
 ZSH_PATH="$(command -v zsh)"
 if [[ "$SHELL" != "$ZSH_PATH" ]]; then
     echo "Setting zsh as default shell (requires password)..."
     sudo usermod -s "$ZSH_PATH" "$(whoami)"
 fi
 
-# ── 8. Flatpak Overrides (Theme Access) ──────────────────────────────────────
+# ── 11. Flatpak Overrides (Theme Access) ─────────────────────────────────────
 echo "Applying Flatpak overrides for Quod Libet and pwvucontrol theme access..."
 # gtk-3.0: Quod Libet needs access to gtk.css + noctalia.css for GTK3 theming
 flatpak override --user --filesystem=xdg-config/gtk-3.0:ro io.github.quodlibet.QuodLibet || true
