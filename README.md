@@ -1,5 +1,7 @@
 Personal atomic image built with [BlueBuild](https://github.com/blue-build/) and based on the [Universal Blue main image](https://github.com/ublue-os/main). Uses the [niri compositor](https://github.com/niri-wm/niri). Opinionated. Work in progress. Not compatible with secure boot. Use at your own risk, especially if you have an NVIDIA GPU. 
 
+If you are looking for a Universal Blue-type image using niri, it would be much easier to use [Wayblue](https://github.com/wayblueorg/wayblue) or [TunaOS](https://github.com/tuna-os/tunaOS).
+
 Some but not all of my personal configuration/dotfiles are applied upon install, namely, niri + waybar + fuzzel. I would suggest to test this in a VM to familiarize yourself with the (perhaps idiosyncratic) custom keybinds before installing. However, some systems have issues with displaying niri in a VM---it has always given me errors and a black screen. Therefore, I would not try out this image unless you are already committed to installing or have already installed a Fedora Atomic / Universal Blue distrobution. In that case you can simply swap back to your old image if you don't like it or it breaks. You should figure out what that involves. 
 
 One option is to install Fedora Silverblue, disable secure boot through UEFI, and then rebase to this image with
