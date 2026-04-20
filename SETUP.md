@@ -35,7 +35,7 @@ During the Fedora Silverblue installer (Anaconda):
 After the first boot into stock Silverblue GNOME, open a terminal and rebase to the custom image.
 
 ```bash
-rpm-ostree rebase ostree-unverified-registry:ghcr.io/samuelueluel/samuel-niri:latest
+bootc switch ghcr.io/samuelueluel/samuel-niri:latest
 systemctl reboot
 ```
 
