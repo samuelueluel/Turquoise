@@ -1,4 +1,4 @@
-Personal atomic image built with [BlueBuild](https://github.com/blue-build/) and based on the [Universal Blue main image](https://github.com/ublue-os/main). Uses the [niri compositor](https://github.com/niri-wm/niri). Opinionated. Work in progress. Not compatible with secure boot. Use at your own risk, especially if you have an NVIDIA GPU. 
+Personal atomic image built with [BlueBuild](https://github.com/blue-build/) and based on the [Universal Blue main image](https://github.com/ublue-os/main/pkgs/container/base-main). Uses the [niri compositor](https://github.com/niri-wm/niri). Opinionated. Work in progress. Not compatible with secure boot. Use at your own risk, especially if you have an NVIDIA GPU. 
 
 If you are looking for a Universal Blue-type image using niri, it would be much easier to use [Wayblue](https://github.com/wayblueorg/wayblue) or [TunaOS](https://github.com/tuna-os/tunaOS).
 
