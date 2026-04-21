@@ -3,7 +3,10 @@
 # Terra is behind upstream; building directly from the tagged release tarball.
 set -euo pipefail
 
-VERSION="0.7.1"
+VERSION=$(git ls-remote --tags https://git.sr.ht/~tsdh/nirius \
+  | grep 'refs/tags/nirius-[0-9]' \
+  | sed 's|.*refs/tags/nirius-||' \
+  | sort -V | tail -1)
 TARBALL_URL="https://git.sr.ht/~tsdh/nirius/archive/nirius-${VERSION}.tar.gz"
 BUILD_DIR="$(mktemp -d)"
 trap "rm -rf '$BUILD_DIR'" EXIT

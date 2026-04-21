@@ -127,7 +127,6 @@ modules:
     repos:
       copr:
         - yalter/niri # niri compositor
-        - che/zed # Zed editor
         - ublue-os/packages # uupd unified updater
       files:
         - https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo
@@ -441,7 +440,7 @@ modules:
         install:
           # Browsers
           # KDE style extensions
-          - org.kde.KStyle.Kvantum//6.10
+          - org.kde.KStyle.Kvantum
           # Productivity
           - md.obsidian.Obsidian
           - com.bitwarden.desktop
@@ -454,7 +453,7 @@ modules:
           - com.saivert.pwvucontrol
           - io.github.quodlibet.QuodLibet
           # Work/GIS
-          - org.qgis.qgis//stable
+          - org.qgis.qgis
           # Entertainment
           - org.nicotine_plus.Nicotine # NOTE: archived on Flathub, may stop receiving updates
           - com.stremio.Stremio

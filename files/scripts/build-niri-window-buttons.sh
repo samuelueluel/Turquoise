@@ -5,7 +5,8 @@
 # Not packaged for Fedora; built from source (Rust).
 set -euo pipefail
 
-VERSION="0.4.0" # this seems like a bespoke version...? issue in the future
+VERSION=$(curl -fsSL "https://api.github.com/repos/adelmonte/niri_window_buttons/releases/latest" \
+  | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//')
 REPO_URL="https://github.com/adelmonte/niri_window_buttons"
 BUILD_DIR="$(mktemp -d)"
 trap "rm -rf '$BUILD_DIR'" EXIT
