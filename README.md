@@ -45,7 +45,7 @@ All initial user-level configuration is handled by `sjust`, a wrapper for `just`
 
 | Recipe | What it does |
 |---|---|
-| `sjust setup` | Runs everything below in sequence |
+| `sjust setup` | Runs everything below in sequence, except sjust swap |
 | `sjust dirs` | Pre-creates `~/.ssh`, `~/.claude`, `~/.config`, etc. |
 | `sjust chezmoi` | Deploys dotfiles snapshot from image → `~/dotfiles`, applies via chezmoi |
 | `sjust zsh-plugins` | Clones Powerlevel10k and fzf-tab |

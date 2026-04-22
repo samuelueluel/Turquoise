@@ -7,7 +7,7 @@ ZEN_DIR   := HOME + "/.config/zen"
 
 # List available recipes
 default:
-    @just --justfile /usr/share/samuel-niri/justfile --list
+    @just --justfile /usr/share/samuel-niri/justfile --list --unsorted
 
 # Full setup — run everything in order
 setup: dirs chezmoi zsh-plugins zen claude-gemini brew flatpaks system
