@@ -34,7 +34,6 @@ dirs:
     chmod 700 {{HOME}}/.ssh
 
 # Deploy dotfiles from image snapshot, init chezmoi, apply
-# After SSH is set up: cd ~/dotfiles && git init && git remote add origin <your-repo> && git fetch && git reset --hard origin/main
 chezmoi:
     #!/usr/bin/env bash
     set -euo pipefail
