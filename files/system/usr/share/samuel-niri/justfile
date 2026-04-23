@@ -195,3 +195,39 @@ swap:
     sudo swapon /var/swapfile
     grep -q '/var/swapfile' /etc/fstab || echo '/var/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab
     swapon --show
+
+# System maintenance: health check, image upgrade, flatpaks, brew, firmware
+update:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo -e "\033[33mNOTE: uupd handles image, flatpaks, homebrew, and distroboxes automatically daily at 4am.\033[0m"
+    echo -e "\033[33mNOTE: Some packages built from source in image recipe are PINNED and won't update without manual intervention; others pull latest release without notification.\033[0m"
+
+    echo -e "\n\033[34m=== System Health Check ===\033[0m"
+    echo -e "\033[36m  \$ systemctl --failed\033[0m"
+    systemctl --failed
+
+    echo -e "\n\033[34m=== Empty Trash? ===\033[0m"
+    read -rp "  Empty trash? (y/n) " -n 1 REPLY; echo
+    if [[ "$REPLY" =~ ^[Yy]$ ]]; then gio trash --empty; fi
+
+    echo -e "\n\033[34m=== Staging Image Update (bootc upgrade) ===\033[0m"
+    echo -e "\033[36m  \$ sudo bootc upgrade\033[0m"
+    sudo bootc upgrade
+
+    echo -e "\n\033[34m=== Removing Unused Flatpak Runtimes ===\033[0m"
+    echo -e "\033[36m  \$ flatpak uninstall --unused -y\033[0m"
+    flatpak uninstall --unused -y || true
+
+    echo -e "\n\033[34m=== Updating Homebrew and Packages ===\033[0m"
+    if command -v brew >/dev/null; then
+        echo -e "\033[36m  \$ brew update && brew upgrade && brew cleanup\033[0m"
+        brew update && brew upgrade && brew cleanup
+    else
+        echo -e "\033[31m  Homebrew not found, skipping.\033[0m"
+    fi
+
+    echo -e "\n\033[34m=== Checking Firmware Updates ===\033[0m"
+    fwupdmgr refresh && fwupdmgr get-updates || true
+
+    echo -e "\n\033[32mUpdate sequence complete!\033[0m"
