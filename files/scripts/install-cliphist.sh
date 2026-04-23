@@ -3,9 +3,9 @@
 # cliphist is not in Fedora 43 repos; we use the pre-built amd64 binary.
 set -euo pipefail
 
-API_URL="https://api.github.com/repos/sentriz/cliphist/releases/latest"
-
-VERSION=$(curl -fsSL "$API_URL" | grep '"tag_name"' | cut -d'"' -f4)
+VERSION=$(curl -fsSLI -o /dev/null -w '%{url_effective}' \
+  https://github.com/sentriz/cliphist/releases/latest \
+  | grep -oP 'v[\d.]+$')
 URL="https://github.com/sentriz/cliphist/releases/download/${VERSION}/${VERSION}-linux-amd64"
 
 echo "Installing cliphist ${VERSION}..."
