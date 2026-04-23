@@ -4,7 +4,7 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 
 ## Image
 
-> The image always fails for me when I boot it in a VM due to niri breaking. If you try this in a VM and get black-screened, it is likely an issue with OpenGL accelartion.
+> The image always fails for me when I boot it in a VM due to niri breaking. If you try this in a VM and get black-screened, it is likely an issue with OpenGL acceleration.
 
 - **Compositor:** Niri
 - **Bar:** Waybar
