@@ -4,6 +4,8 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 
 ## Image
 
+> The image always fails for me when I boot it in a VM due to niri breaking. If you try this in a VM and get black-screened, it is likely an issue with OpenGL accelartion.
+
 - **Compositor:** Niri
 - **Bar:** Waybar
 - **Terminals:** Alacritty (primary), Kitty (only for Yazi)
@@ -13,13 +15,11 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 - **File manager:** Yazi (in Kitty), Nemo (backup)
 - **Display manager:** greetd + gtkgreet
 - **Kernel:** [@kernel-vanilla/stable](https://copr.fedorainfracloud.org/coprs/g/kernel-vanilla/stable/)
-- **Homebrew** for user CLI tools; see `sjust brew`
-- **Flatpaks:** Only codec/theming essentials pre-installed; see `sjust flatpaks`
+- **Homebrew** for user CLI tools; see `sjust brew` below
+- **Flatpaks:** Only codec/theming essentials pre-installed; see `sjust flatpaks` below
 - **Automatic system updates:** Everything on the system updates daily through `uupd`, available upon reboot
 
-System-wide default configs for niri, waybar, and fuzzel are baked in as fallbacks, active until user dotfiles are applied.
-
-> The image always fails for me when I boot it in a VM due to niri having issues. If you try this in a VM and get black-screened, it is likely an issue with OpenGL accelartion. I've never been able to fix it.
+Essential system packages are usually pinned to the Fedora update cycle. Most of everything else tracks the latest release. You should follow the Universal Blue philosophy of using Flatpak for GUI applications, Distrobox for things without Flatpaks or that need deeper system access, and Homebrew for CLI tools. Never layer with rpm-ostree.
 
 ## Fresh install
 
@@ -41,7 +41,7 @@ After getting through the gtkgreet login screen, press **Super+\`** to open a te
 
 ### 3. Run sjust
 
-Remaining user-level configuration is handled by `sjust`, a wrapper for `just`. All configuration files and scripts it applies are included in the image.
+System-wide default configs for niri, waybar, and fuzzel are baked in as fallbacks, active until user dotfiles are applied. Remaining user-level configuration is handled by `sjust`, a wrapper for `just`. All configuration files and scripts it applies are included in the image.
 
 | Recipe | Description |
 |---|---|
