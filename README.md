@@ -1,4 +1,4 @@
-Personal atomic Fedora image built with [BlueBuild](https://github.com/blue-build/) on top of [Universal Blue's base-main](https://github.com/ublue-os/main/pkgs/container/base-main). Uses the [niri](https://github.com/niri-wm/niri) scrolling Wayland compositor.
+Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-build/) on top of [Universal Blue's base-main](https://github.com/ublue-os/main/pkgs/container/base-main). Uses the [niri](https://github.com/niri-wm/niri) scrolling Wayland compositor.
 
 > **Not intended for general use and work-in-progress.** This is a personal daily-driver image with opinionated configuration. Included packages are subject to frequent change. Not compatible with Secure Boot. If you want a Universal Blue-type image with niri, it would be safer and easier to use [Wayblue](https://github.com/wayblueorg/wayblue), [Zirconium](https://github.com/zirconium-dev/zirconium), or [TunaOS](https://github.com/tuna-os/tunaOS) instead. I assume I'm the only person that will ever use this, but if someone else does, you should let me know by filing an issue in this GitHub repository. We can talk and make sure I don't screw up your system with an update.
 
@@ -49,11 +49,11 @@ All initial user-level configuration is handled by `sjust`, a wrapper for `just`
 | `sjust dirs` | Pre-creates `~/.ssh`, `~/.claude`, `~/.config`, etc. |
 | `sjust chezmoi` | Deploys dotfiles snapshot from image → `~/dotfiles`, applies via chezmoi |
 | `sjust zsh-plugins` | Clones Powerlevel10k and fzf-tab |
-| `sjust zen` | Creates Zen Browser profiles, restores settings and themes, generates launchers |
+| `sjust zen` | Creates Zen profiles, restores settings, and sets Helium as default browser |
 | `sjust claude-gemini` | Restores Claude Code and Gemini CLI settings |
-| `sjust brew` | Fixes Homebrew and runs `brew bundle`, installing common CLI tools |
-| `sjust flatpaks` | Applies Flatpak permission overrides for GTK theming |
-| `sjust system` | Adds user to libvirt group, sets Zsh as default shell |
+| `sjust brew` | Sets up Homebrew permissions, installs Brewfile packages, and configures RTK |
+| `sjust flatpaks` | Adds Flathub, installs Flatpaks, and applies permission overrides |
+| `sjust system` | Adds user to all required groups, sets Zsh as default shell |
 | `sjust swap` | Replaces default zRAM with a 16GB swap file on `/var` |
 
 Log out and back in after setup to activate the new shell and Homebrew PATH.

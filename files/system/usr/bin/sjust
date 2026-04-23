@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+export JUST_UNSORTED=1
 exec just --justfile /usr/share/samuel-niri/justfile --working-directory "$HOME" "$@"
