@@ -45,16 +45,16 @@ System-wide default configs for niri, waybar, and fuzzel are baked in as fallbac
 
 | Recipe | Description |
 |---|---|
-| `sjust setup` | Runs everything below in sequence, except sjust swap |
-| `sjust dirs` | Pre-creates `~/.ssh`, `~/.claude`, `~/.config`, etc. |
+| `sjust setup` | Runs everything below in sequence, except sjust swap and sjust update |
+| `sjust dirs` | Pre-creates `~/.ssh`, `~/.config`, `~/.npm-global`, etc. |
 | `sjust chezmoi` | Deploys dotfiles snapshot from image → `~/dotfiles`, applies via chezmoi |
 | `sjust zsh-plugins` | Clones Powerlevel10k and fzf-tab |
-| `sjust zen` | Creates Zen profiles, restores settings, and sets Helium as default browser |
-| `sjust claude-gemini` | Restores Claude Code and Gemini CLI settings |
+| `sjust zen` | Creates Zen profiles, restores settings from dotfiles, and sets Helium as default "light/utility" browser |
 | `sjust brew` | Sets up Homebrew permissions, installs Brewfile packages including Claude Code and Gemini CLI, and configures RTK |
 | `sjust flatpaks` | Adds Flathub, installs my Flatpaks, and applies permission overrides |
 | `sjust system` | Adds user to all required groups, sets Zsh as default shell |
 | `sjust swap` | Replaces default zRAM with a 16GB swap file on `/var` |
+| `sjust update` | Manually runs the automatic system update with some additional housecleaning
 
 Log out and back in after setup to activate the new shell and Homebrew PATH.
 
