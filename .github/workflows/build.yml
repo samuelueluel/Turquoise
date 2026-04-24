@@ -4,8 +4,8 @@ on:
     - cron: "00 06 * * *" # build at 06:00 UTC daily
                            # (20 min after ublue base images rebuild)
   push:
-    # paths-ignore:
-    #   - "**.md"
+    paths-ignore:
+      - "**.md"
   pull_request:
   workflow_dispatch:
 
