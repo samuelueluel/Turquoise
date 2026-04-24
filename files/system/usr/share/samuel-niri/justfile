@@ -15,7 +15,6 @@ setup: dirs chezmoi zsh-plugins zen brew flatpaks system
     @echo ""
     @echo "Done. Manual steps remaining:"
     @echo "  - Log out and back in for group changes to take effect"
-    @echo "  - Wallpapers: copy to ~/Pictures/Wallpapers"
     @echo "  - Dropbox: sign in"
     @echo "  - EasyEffects: open app to confirm presets loaded"
     @echo "  - Zen Browser: install extensions manually"
@@ -61,7 +60,7 @@ zen:
     zen-browser -CreateProfile "utility {{ZEN_DIR}}/zen.utility"   2>/dev/null || true
     zen-browser -CreateProfile "work {{ZEN_DIR}}/zen.work"         2>/dev/null || true
 
-    SRC="{{HOME}}/dotfiles/zen/personal"
+    SRC="{{HOME}}/dotfiles/zen"
     for profile in zen.personal zen.utility zen.work; do
         DEST="{{ZEN_DIR}}/$profile"
         mkdir -p "$DEST/chrome"
@@ -93,6 +92,13 @@ zen:
     EOF
         chmod +x "$FILE"
     done
+
+    mkdir -p "$HOME/.local/share/icons/hicolor/64x64/apps"
+    for profile in personal utility work; do
+        ln -sf /usr/share/icons/Papirus/64x64/apps/zen-browser.svg \
+            "$HOME/.local/share/icons/hicolor/64x64/apps/zen-$profile.svg"
+    done
+    gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
 
     xdg-settings set default-web-browser helium.desktop 2>/dev/null || true
     for mime in x-scheme-handler/http x-scheme-handler/https text/html \
