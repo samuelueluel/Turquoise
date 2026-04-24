@@ -35,7 +35,7 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 | Kernel | [@kernel-vanilla/stable](https://copr.fedorainfracloud.org/coprs/g/kernel-vanilla/stable/) |
 | CLI tools | Homebrew (see `sjust brew`) |
 | Flatpaks | Codecs/theming essentials only (see `sjust flatpaks`) |
-| Automatic updates | Daily system updates via `uupd`, applied on next reboot |
+| Automation | Daily system updates via `uupd` applied on next reboot, trash and clipboard history emptied on boot |
 
 Essential system packages track the Fedora update cycle. Most everything else tracks the latest release. Philosophy: Flatpak for GUI apps, Distrobox for apps without Flatpaks or needing deep system access, Homebrew for CLI tools. Never layer with `rpm-ostree`.
 
@@ -60,7 +60,7 @@ systemctl reboot
 
 After reaching the gtkgreet login screen, press **Super+\`** to open a terminal or **Super+Space** to open the app launcher. Use `nmtui` to configure WiFi if needed.
 
-> [!TIP]
+> [!IMPORTANT]
 > **CapsLock** is rebound to Mod (Super/Start). The physical Mod key becomes Menu (`XF86MenuKB` in niri config). Press **Mod+/** for the keybind dashboard before doing anything else, or you will have no idea how to navigate the desktop.
 
 ### 3. Run sjust
