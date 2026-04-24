@@ -11,7 +11,7 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 
 ## Contents
 
-- [Stack](#stack)
+- [Image](#image)
 - [Fresh Install](#fresh-install)
   - [1. Install Fedora Silverblue](#1-install-fedora-silverblue)
   - [2. Rebase to this image](#2-rebase-to-this-image)
