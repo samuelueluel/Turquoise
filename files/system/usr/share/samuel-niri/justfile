@@ -205,9 +205,21 @@ update:
     echo -e "\033[36m  \$ sudo bootc upgrade\033[0m"
     sudo bootc upgrade
 
+    echo -e "\n\033[34m=== Updating Flatpaks ===\033[0m"
+    echo -e "\033[36m  \$ flatpak update -y\033[0m"
+    flatpak update -y || true
+
     echo -e "\n\033[34m=== Removing Unused Flatpak Runtimes ===\033[0m"
     echo -e "\033[36m  \$ flatpak uninstall --unused -y\033[0m"
     flatpak uninstall --unused -y || true
+
+    echo -e "\n\033[34m=== Updating Distroboxes ===\033[0m"
+    if command -v distrobox >/dev/null; then
+        echo -e "\033[36m  \$ distrobox upgrade --all\033[0m"
+        distrobox upgrade --all || true
+    else
+        echo -e "\033[31m  Distrobox not found, skipping.\033[0m"
+    fi
 
     echo -e "\n\033[34m=== Updating Homebrew and Packages ===\033[0m"
     if command -v brew >/dev/null; then
