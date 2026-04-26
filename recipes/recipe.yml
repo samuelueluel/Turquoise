@@ -499,10 +499,15 @@ modules:
     scripts:
       - install-zen-browser.sh
 
-  # ── Install Helium Browser (AppImage) ────────────────────────────────────
-  - type: script
-    scripts:
-      - install-helium.sh
+  # ── Install Helium Browser (COPR RPM) ────────────────────────────────────
+  - type: dnf
+    repos:
+      copr:
+        - imput/helium
+    install:
+      install-weak-deps: false
+      packages:
+        - helium
 
   # ── Build patched niri_window_buttons waybar module ──────────────────────
   # Patch centers icon in highlight box when show_window_titles=false.
