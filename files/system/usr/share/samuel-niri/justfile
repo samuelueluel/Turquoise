@@ -298,6 +298,20 @@ obsidian-cli:
 
     echo "Done. Launch Obsidian to activate the socket, then test with: obsidian files"
 
+# Enable random wallpaper on each login via systemd user service (requires chezmoi dotfiles deployed)
+wallpaper-random:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    script="{{HOME}}/.local/bin/random-wallpaper.sh"
+    service="{{HOME}}/.config/systemd/user/random-wallpaper.service"
+    [[ -x "$script" && -f "$service" ]] || {
+        echo "Files not found — run 'sjust chezmoi' to deploy dotfiles first."
+        exit 1
+    }
+    systemctl --user daemon-reload
+    systemctl --user enable --now random-wallpaper.service
+    @echo "random-wallpaper.service enabled."
+
 # Sync Claude + Gemini config and memories to system_config_git backup (requires private SSH key; not in setup)
 backup-llm:
     #!/usr/bin/env bash
