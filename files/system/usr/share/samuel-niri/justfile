@@ -249,6 +249,15 @@ ssh-setup:
     systemctl --user enable --now ssh-agent.socket
     export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
     ssh-add ~/.ssh/id_ed25519
+    # Append auto-load snippet to ~/.zshrc if not already present
+    if ! grep -q 'ssh-add -l.*ssh-agent.socket' "$HOME/.zshrc" 2>/dev/null; then
+        cat >> "$HOME/.zshrc" <<'EOF'
+
+# Auto-load SSH key on first terminal (added by sjust ssh-setup)
+[[ -S "$SSH_AUTH_SOCK" ]] && { ssh-add -l &>/dev/null || ssh-add ~/.ssh/id_ed25519; }
+EOF
+        echo "Added ssh-add auto-load to ~/.zshrc."
+    fi
     echo "SSH agent socket enabled and key loaded."
 
 # Set up Obsidian CLI wrapper — enables CLI toggle and verifies wrapper is deployed (not in setup)
