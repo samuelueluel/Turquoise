@@ -10,7 +10,7 @@ default:
     @just --justfile /usr/share/samuel-niri/justfile --list --unsorted
 
 # Full setup — run everything in order
-setup: dirs zen chezmoi zen-extensions zsh-plugins brew flatpaks system
+setup: dirs zen waypaper-defaults chezmoi zen-extensions zsh-plugins brew flatpaks system
     update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
     @echo ""
     @echo "Done. Manual steps remaining:"
@@ -29,6 +29,19 @@ dirs:
         {{HOME}}/.ssh \
         {{HOME}}/.npm-global/bin
     chmod 700 {{HOME}}/.ssh
+
+# Seed default waypaper config if not already present (before chezmoi)
+waypaper-defaults:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    CONFIG="{{HOME}}/.config/waypaper/config.ini"
+    if [[ -f "$CONFIG" ]]; then
+        echo "waypaper config already exists, skipping."
+        exit 0
+    fi
+    mkdir -p "{{HOME}}/.config/waypaper"
+    cp {{SHARE}}/waypaper-default.ini "$CONFIG"
+    echo "waypaper default config written."
 
 # Register Zen profiles and create .desktop launchers (optional; before chezmoi)
 zen:
@@ -251,11 +264,7 @@ ssh-setup:
     ssh-add ~/.ssh/id_ed25519
     # Append auto-load snippet to ~/.zshrc if not already present
     if ! grep -q 'ssh-add -l.*ssh-agent.socket' "$HOME/.zshrc" 2>/dev/null; then
-        cat >> "$HOME/.zshrc" <<'EOF'
-
-# Auto-load SSH key on first terminal (added by sjust ssh-setup)
-[[ -S "$SSH_AUTH_SOCK" ]] && { ssh-add -l &>/dev/null || ssh-add ~/.ssh/id_ed25519; }
-EOF
+        printf '\n# Auto-load SSH key on first terminal (added by sjust ssh-setup)\n[[ -S "$SSH_AUTH_SOCK" ]] && { ssh-add -l &>/dev/null || ssh-add ~/.ssh/id_ed25519; }\n' >> "$HOME/.zshrc"
         echo "Added ssh-add auto-load to ~/.zshrc."
     fi
     echo "SSH agent socket enabled and key loaded."
