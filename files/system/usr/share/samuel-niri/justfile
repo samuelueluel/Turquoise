@@ -293,10 +293,8 @@ backup-llm:
         echo "You do not have permission for this recipe (no SSH access to system_config_git)."
         exit 1
     fi
-    rsync -av {{HOME}}/CLAUDE.md {{HOME}}/system_config_git/claude-backup/
-    rsync -av {{HOME}}/.claude/projects/-var-home-samuel/memory/ {{HOME}}/system_config_git/claude-backup/memory/
-    rsync -av {{HOME}}/.gemini/GEMINI.md {{HOME}}/system_config_git/claude-backup/gemini-memory/
-    rsync -av {{HOME}}/.gemini/memory/samuel/GEMINI.md {{HOME}}/system_config_git/claude-backup/gemini-memory/
+    rsync -av {{HOME}}/.claude/ {{HOME}}/system_config_git/claude-backup/claude/
+    rsync -av {{HOME}}/.gemini/ {{HOME}}/system_config_git/claude-backup/gemini/
 
 # System maintenance: health check, image upgrade, flatpaks, brew, distroboxes, firmware (not in setup)
 update:
