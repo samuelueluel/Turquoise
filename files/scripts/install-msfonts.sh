@@ -24,7 +24,7 @@ BASE_URL="https://downloads.sourceforge.net/corefonts"
 
 for pkg in "${FONT_PKGS[@]}"; do
     echo "Downloading $pkg..."
-    curl -fsSLo "$pkg" "$BASE_URL/$pkg" || {
+    curl -fsSLo "$pkg" --retry 5 --retry-delay 5 "$BASE_URL/$pkg" || {
         echo "Warning: failed to download $pkg, skipping"
         continue
     }

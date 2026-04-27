@@ -68,6 +68,9 @@ After booting into the new image, press **Super+\`** to open a terminal or **Sup
 
 System-wide default configs for niri, waybar, and fuzzel are baked in as fallbacks, active until user dotfiles are applied. Remaining user-level configuration is handled by `sjust`, a `just` wrapper. All configuration files and scripts it applies are included in the image, tracking my personal dotfiles repo.
 
+> [!IMPORTANT]
+> This assumes a fresh install. If you rebase from something else carrying your home folders with you, then you need to make sure all dotfiles and wallpapers are backed up. `sjust chezmoi`, and therefore `sjust setup`, may overwrite them. Of course, you don't need to run any of the `sjust` commands if you don't want to.
+
 | Recipe | Description |
 |---|---|
 | `sjust setup` | Runs everything below in sequence (except `sjust swap` and `sjust update`) |

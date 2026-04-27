@@ -8,14 +8,14 @@ API_URL="https://api.github.com/repos/sxyazi/yazi/releases/latest"
 WORK_DIR="$(mktemp -d)"
 trap "rm -rf '$WORK_DIR'" EXIT
 
-VERSION=$(curl -fsSL "$API_URL" | grep '"tag_name"' | cut -d'"' -f4)
+VERSION=$(curl -fsSL --retry 5 --retry-delay 5 "$API_URL" | grep '"tag_name"' | cut -d'"' -f4)
 TARBALL="yazi-${ARCH}-unknown-linux-musl.zip"
 URL="https://github.com/sxyazi/yazi/releases/download/${VERSION}/${TARBALL}"
 
 echo "Installing yazi ${VERSION}..."
 
 cd "$WORK_DIR"
-curl -fsSLo "$TARBALL" "$URL"
+curl -fsSLo "$TARBALL" --retry 5 --retry-delay 5 "$URL"
 unzip -q "$TARBALL"
 
 EXTRACTED="yazi-${ARCH}-unknown-linux-musl"

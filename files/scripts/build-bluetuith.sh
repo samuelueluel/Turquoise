@@ -7,11 +7,11 @@ API_URL="https://api.github.com/repos/darkhz/bluetuith/releases/latest"
 WORK_DIR="$(mktemp -d)"
 trap "rm -rf '$WORK_DIR'" EXIT
 
-VERSION=$(curl -fsSL "$API_URL" | grep '"tag_name"' | cut -d'"' -f4)
+VERSION=$(curl -fsSL --retry 5 --retry-delay 5 "$API_URL" | grep '"tag_name"' | cut -d'"' -f4)
 echo "Building bluetuith ${VERSION}..."
 
 cd "$WORK_DIR"
-curl -fsSL "https://github.com/darkhz/bluetuith/archive/refs/tags/${VERSION}.tar.gz" \
+curl -fsSL --retry 5 --retry-delay 5 "https://github.com/darkhz/bluetuith/archive/refs/tags/${VERSION}.tar.gz" \
   | tar -xz
 cd "bluetuith-${VERSION#v}"
 
