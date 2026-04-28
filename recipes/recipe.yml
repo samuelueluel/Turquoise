@@ -462,9 +462,10 @@ modules:
 
   # ── Install build-time toolchain ─────────────────────────────────────────
   # All build scripts assume these are pre-installed; cleaned up afterwards.
-  #   cargo, rust, rust-std-static, binutils, cpp  ← Rust builds (nirius, niri-window-buttons)
+  #   cargo, rust, rust-std-static, binutils, cpp  ← Rust builds (nirius, niri-window-buttons, fsel)
   #   gtk3-devel, glib2-devel                      ← niri-window-buttons, nwg-look
-  #   meson, ninja-build, gcc                      ← termfilechooser
+  #   meson, ninja-build, gcc                      ← termfilechooser, cclip
+  #   wayland-devel, sqlite-devel, xxhash-devel    ← cclip
   #   inih-devel, systemd-devel, scdoc             ← termfilechooser
   #   golang + golang-bin/src/go-filesystem, make  ← nwg-look
   #   cabextract                                   ← install-msfonts
@@ -480,6 +481,9 @@ modules:
         - meson
         - ninja-build
         - gcc
+        - wayland-devel
+        - sqlite-devel
+        - xxhash-devel
         - inih-devel
         - systemd-devel
         - scdoc
@@ -579,6 +583,7 @@ modules:
   # deps that dnf pulled in but won't auto-remove:
   #   rust-std-static, binutils, cpp  ← orphaned deps of cargo/rust
   #   golang-bin, golang-src, go-filesystem  ← orphaned deps of golang
+  #   wayland-devel, sqlite-devel, xxhash-devel ← orphaned deps of cclip
   - type: dnf
     remove:
       packages:
@@ -592,6 +597,9 @@ modules:
         - meson
         - ninja-build
         - gcc
+        - wayland-devel
+        - sqlite-devel
+        - xxhash-devel
         - inih-devel
         - systemd-devel
         - scdoc
