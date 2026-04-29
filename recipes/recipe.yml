@@ -145,8 +145,12 @@ modules:
   # ── Wayland compositor stack ──────────────────────────────────────────────
   - type: dnf
     repos:
-      copr:
-        - erikreider/swayosd # author's COPR; was in Terra which has recurring GPG issues
+      # erikreider/swayosd lacks a Fedora 44 chroot as of April 2026.
+      # Pointing directly to the Fedora 43 repo file to fix the build.
+      # copr:
+      #   - erikreider/swayosd
+      files:
+        - https://copr.fedorainfracloud.org/coprs/erikreider/swayosd/repo/fedora-43/erikreider-swayosd-fedora-43.repo
     install:
       install-weak-deps: false
       packages:
