@@ -99,14 +99,16 @@ modules:
 
   # ── RPM Fusion nonfree + tainted ─────────────────────────────────────────
   # base-main pre-configures RPM Fusion free; we add nonfree for codecs.
-  # rpmfusion-nonfree-release-tainted enables the tainted subrepo (libdvdcss).
+  # rpmfusion-free-release-tainted is installed via script (not dnf module) because
+  # RPM Fusion's rawhide repo file causes dnf to resolve the F+1 version of the
+  # tainted package, which fails on the current release. Script uses --disablerepo.
   - type: dnf
     repos:
       nonfree: rpmfusion
-    install:
-      install-weak-deps: false
-      packages:
-        - rpmfusion-free-release-tainted # enables free-tainted subrepo (libdvdcss is here)
+
+  - type: script
+    scripts:
+      - install-rpmfusion-tainted.sh
 
   # ── Stable kernel (kernel-vanilla/stable) ────────────────────────────────
   # Replaces the UBlue base kernel with latest upstream stable release.
