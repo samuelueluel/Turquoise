@@ -1,7 +1,7 @@
 name: samuel-niri
 description: Minimal Niri Wayland Fedora Atomic image for work laptop
 base-image: ghcr.io/ublue-os/base-main
-image-version: latest # latest
+image-version: 44 # latest
 
 # To list all packages in the base image, run:
 # podman run --rm -it ghcr.io/ublue-os/base-main:latest rpm -qa
@@ -143,10 +143,8 @@ modules:
         - uupd
 
   # ── Wayland compositor stack ──────────────────────────────────────────────
+  # swayosd: COPR has no Fedora 44 builds; built from source via build-swayosd.sh
   - type: dnf
-    repos:
-      copr:
-        - erikreider/swayosd # author's COPR; was in Terra which has recurring GPG issues
     install:
       install-weak-deps: false
       packages:
@@ -176,7 +174,7 @@ modules:
         - jq # JSON parsing for Waybar/Niri IPC scripts — think already in base-main
         - socat # IPC socket listener for Niri event-driven Waybar updates
         - pamixer # CLI volume control for Waybar scroll/click actions
-        - swayosd # OSD popups for volume/brightness/capslock changes
+        # swayosd: built from source via build-swayosd.sh
         # dex: not in Fedora repos — XDG Autostart launcher, add via script if needed
 
   # ── Display manager ───────────────────────────────────────────────────────
@@ -463,14 +461,16 @@ modules:
 
   # ── Install build-time toolchain ─────────────────────────────────────────
   # All build scripts assume these are pre-installed; cleaned up afterwards.
-  #   cargo, rust, rust-std-static, binutils, cpp  ← Rust builds (nirius, niri-window-buttons, fsel)
+  #   cargo, rust, rust-std-static, binutils, cpp  ← Rust builds (nirius, niri-window-buttons, fsel, swayosd)
   #   gtk3-devel, glib2-devel                      ← niri-window-buttons, nwg-look
-  #   meson, ninja-build, gcc                      ← termfilechooser, cclip
+  #   meson, ninja-build, gcc                      ← termfilechooser, cclip, swayosd
   #   wayland-devel, sqlite-devel, xxhash-devel    ← cclip
   #   inih-devel, systemd-devel, scdoc             ← termfilechooser
   #   golang + golang-bin/src/go-filesystem, make  ← nwg-look
   #   cabextract                                   ← install-msfonts
   #   policycoreutils-python-utils                 ← setup-selinux (semanage fallback)
+  #   gtk4-devel, gtk4-layer-shell-devel, pulseaudio-libs-devel,
+  #     libinput-devel, libevdev-devel, sassc      ← swayosd
   - type: dnf
     install:
       install-weak-deps: false
@@ -479,6 +479,12 @@ modules:
         - rust
         - gtk3-devel
         - glib2-devel
+        - gtk4-devel
+        - gtk4-layer-shell-devel
+        - pulseaudio-libs-devel
+        - libinput-devel
+        - libevdev-devel
+        - sassc
         - meson
         - ninja-build
         - gcc
@@ -498,6 +504,12 @@ modules:
   - type: script
     scripts:
       - build-nirius.sh
+
+  # ── Build swayosd from source ─────────────────────────────────────────────
+  # erikreider/swayosd COPR does not publish Fedora 44 builds.
+  - type: script
+    scripts:
+      - build-swayosd.sh
 
   # ── Install Zen Browser (Native Binary) ──────────────────────────────────
   - type: script
@@ -595,6 +607,12 @@ modules:
         - cpp
         - gtk3-devel
         - glib2-devel
+        - gtk4-devel
+        - gtk4-layer-shell-devel
+        - pulseaudio-libs-devel
+        - libinput-devel
+        - libevdev-devel
+        - sassc
         - meson
         - ninja-build
         - gcc
