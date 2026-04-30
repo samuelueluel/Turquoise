@@ -660,8 +660,7 @@ modules:
         - xfs_scrub_all.timer
         - uupd.timer
       disabled:
-        - gdm.service
-        - sddm.service
+        # gdm.service and sddm.service removed: not present in F44 base-main
         - flatpak-system-update.timer
         - brew-update.timer
         - rpm-ostreed-automatic.timer
