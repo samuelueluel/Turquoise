@@ -16,6 +16,7 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
   - [1. Install Fedora Silverblue](#1-install-fedora-silverblue)
   - [2. Rebase to this image](#2-rebase-to-this-image)
   - [3. Run sjust](#3-run-sjust)
+- [Keybinds](#keybinds)
 - [AI Disclaimer](#ai-disclaimer)
 
 ---
@@ -29,17 +30,17 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 | App Launcher | fsel |
 | Display manager | greetd + gtkgreet |
 | Shell | Zsh + Powerlevel10k + fzf-tab |
-| Terminals | Alacritty (primary), Kitty (Yazi only) |
+| Terminals | Alacritty (primary), Kitty (for image previews in Yazi etc) |
 | Editor | Zed |
 | Browsers | Zen, Helium |
-| File manager | Yazi (in Kitty), Nemo (backup) |
+| File manager | Yazi (launched in Kitty), Nemo (backup) |
 | Cloud storage | Dropbox |
 | Kernel | [@kernel-vanilla/stable](https://copr.fedorainfracloud.org/coprs/g/kernel-vanilla/stable/) |
 | CLI tools | Homebrew (see `sjust brew`) |
-| Flatpaks | Codecs/theming essentials only (see `sjust flatpaks`) |
+| Flatpaks | Codecs/theming essentials only before running `sjust flatpaks` |
 | Automation | Daily image + Flatpak + Homebrew + Distrobox updates via `uupd`, random wallpaper on login, trash and clipboard history emptied on boot |
 
-Flatpak for GUI apps, Distrobox for apps without Flatpaks or needing deep system access, Homebrew for CLI tools. Never layer with `rpm-ostree`. Essential system packages track the Fedora update cycle. Most everything else tracks the latest release.
+Essential system packages track the Fedora update cycle. Most everything else tracks the latest release.
 
 > [!NOTE]
 > VM installs may black-screen due to niri's OpenGL acceleration requirement.
@@ -60,14 +61,14 @@ sudo bootc switch ghcr.io/samuelueluel/samuel-niri:latest
 systemctl reboot
 ```
 
-After booting into the new image, press **Super+\`** to open a terminal or **Super+Space** to open the app launcher. Use `nmtui` to configure WiFi if needed.
+After booting into the new image, press **Mod+\`** to open a terminal or **Mod+Space** to open the app launcher. Use `nmtui` to configure WiFi if needed.
 
 > [!IMPORTANT]
-> **CapsLock** is rebound to Mod (Super/Start). The physical Mod key becomes Menu (`XF86MenuKB` in niri config). Press **Mod+/** for the niri keybind dashboard before doing anything else, or you will have no idea how to navigate the desktop. App-specific keybinds are found in their config files.
+> **CapsLock** is rebound to Mod (Super/Start). The physical Mod key becomes Menu (`XF86MenuKB` in niri config). Press **Mod+/** for the niri keybind dashboard before doing anything else, or you will have no idea how to navigate the desktop. App-specific keybinds are found in their config files and below.
 
 ### 3. Run sjust
 
-System-wide default configs for niri and waybar are baked in as fallbacks, active until user dotfiles are applied. Remaining user-level configuration is handled by `sjust`, a `just` wrapper. All configuration files and scripts it applies are included in the image, tracking my personal dotfiles repo.
+System-wide default configs for niri and waybar are baked in as fallbacks, active until user dotfiles are applied. Remaining user-level configuration is handled by `sjust`. All configuration files and scripts it applies are included in the image, tracking my personal [dotfiles repo](https://github.com/samuelueluel/dotfiles).
 
 > [!IMPORTANT]
 > This assumes a fresh install. If you rebase from something else carrying your home folders with you, then you need to make sure all dotfiles and wallpapers are backed up. `sjust chezmoi`, and therefore `sjust setup`, may overwrite them. Of course, you don't need to run any of the `sjust` commands if you don't want to.
@@ -80,17 +81,88 @@ System-wide default configs for niri and waybar are baked in as fallbacks, activ
 | `sjust chezmoi` | Deploys dotfiles snapshot from image → `~/dotfiles`, applies via chezmoi (includes Zen config) |
 | `sjust zen-extensions` | Installs Zen Browser extensions (AMO + custom XPIs) into each profile; run after chezmoi |
 | `sjust zsh-plugins` | Clones Powerlevel10k and fzf-tab |
-| `sjust brew` | Sets up Homebrew permissions, installs Brewfile packages (including Claude Code and Gemini CLI), installs RTK and bbrew |
-| `sjust flatpaks` | Adds Flathub, installs Flatpaks, applies permission overrides |
+| `sjust brew` | Sets up Homebrew permissions, installs Brewfile packages, and installs non-Brewfile things like bbrew |
+| `sjust flatpaks` | Adds Flathub, installs Flatpaks, applies permission overrides for theming|
 | `sjust system` | Adds user to required groups, sets Zsh as default shell |
 | `sjust swap` | Replaces default zRAM with a 16GB swap file on `/var` |
 | `sjust update` | Manually triggers the automatic system update with additional housecleaning |
 
 > [!IMPORTANT]
-> **`sjust chezmoi` must run before `sjust brew`** because brew depends on `~/.Brewfile` that chezmoi puts in place. `sjust zen` and `sjust zen-extensions` are both optional; skip both and Zen opens with default settings. If you run them, you must run `sjust zen` before `sjust chezmoi`, and then run `sjust zen-extensions` after `sjust chezmoi`.
+> **`sjust chezmoi` must run before `sjust brew`** because brew depends on `~/.Brewfile` that chezmoi puts in place. `sjust zen` and `sjust zen-extensions` are both optional. If you run them, you must run `sjust zen` before `sjust chezmoi`, and then run `sjust zen-extensions` after `sjust chezmoi`.
 > `sjust` recipes not listed in this README but present in the justfile are not for general use---they will fail harmlessly due to lacking SSH access to private repos.
 
 Log out and back in after setup to activate the new shell and Homebrew PATH.
+
+---
+
+## App-specific Keybinds
+
+**CapsLock is Mod.** Press **Mod+/** for the full niri keybind dashboard.
+
+An **Alt+WASD** navigation scheme is used across apps (up/down/left/right). Many default keybinds are remapped or disabled accordingly.
+
+### Alacritty
+
+| Key | Action |
+|---|---|
+| Alt+W / S | Scroll up / down one line |
+| Alt+A / D | Jump backward / forward one word (readline) |
+| Ctrl+W | Delete previous character |
+| Ctrl+Q | Delete previous word |
+| Alt+Q / Alt+E | Jump to beginning / end of line |
+| Shift+Return | Send Alt+Return escape sequence |
+| Ctrl+Shift+C / V | Copy / Paste |
+
+### Yazi
+
+Yazi is launched by Mod+E as a floating Kitty window.
+
+| Key | Action |
+|---|---|
+| Alt+W / S | Cursor up / down |
+| Alt+A / D | Parent directory / open |
+| Alt+1–9 | Switch to tab 1–9 |
+| Ctrl+T / Ctrl+Q | New tab / close tab |
+| Ctrl+F | Fuzzy jump (fzf) |
+| Ctrl+G | Fuzzy jump to directory |
+| Ctrl+H | Search by content (ripgrep) |
+| Ctrl+S | Search by name (fd) |
+| Ctrl+N / Ctrl+B | Search Obsidian notes / grep note content and open in Obsidian |
+| Ctrl+A | Create file or folder |
+| Ctrl+E | Rename |
+| Ctrl+Delete | Trash file |
+| Ctrl+Shift+C / X / V | Copy / cut / paste |
+| Ctrl+Shift+P | Copy path of item to clipboard |
+| Ctrl+P | Visual mode |
+| Ctrl+. | Toggle hidden files |
+| Ctrl+K | Jump via zoxide |
+| Ctrl+J | Filter |
+| Ctrl+R | Reload |
+
+### Zed
+
+| Key | Action |
+|---|---|
+| Alt+W / S / A / D | Move cursor up / down / left / right |
+| Ctrl+Space | Command palette |
+| Ctrl+Q | Delete previous word (editor); close active item/pane (elsewhere) |
+| Ctrl+W | Backspace (editor); close active item/pane (elsewhere) |
+| Alt+Q / E | Jump to beginning / end of line |
+| Alt+Tab / Shift+Tab | Tab switcher forward / select last |
+| Ctrl+R | Reload file |
+
+### Zen Browser
+
+This assumes the full `sjust` sequence has been run and extensions enabled.
+
+| Key | Action |
+|---|---|
+| Alt+W / S | Move up / down tab list (custom extension) |
+| Alt+A / D | Next / previoius workspace |
+| Ctrl+Space | Command palette |
+| Ctrl+T / Ctrl+Q | New tab / close tab |
+| Alt+Tab | Last recently focused tab (custom extension) |
+| Ctrl+R | Reload |
 
 ---
 
