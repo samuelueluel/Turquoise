@@ -310,11 +310,17 @@ update:
 
     echo -e "\n\033[34m=== System Health Check ===\033[0m"
     echo -e "\033[36m  \$ systemctl --failed\033[0m"
-    systemctl --failed
+    systemctl --failed || true
 
     echo -e "\n\033[34m=== Empty Trash? ===\033[0m"
     read -rp "  Empty trash? (y/n) " -n 1 REPLY; echo
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then gio trash --empty; fi
+    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+        if command -v trash-empty >/dev/null; then
+            trash-empty
+        else
+            gio trash --empty || true
+        fi
+    fi
 
     echo -e "\n\033[34m=== Staging Image Update (bootc upgrade) ===\033[0m"
     echo -e "\033[36m  \$ sudo bootc upgrade\033[0m"
