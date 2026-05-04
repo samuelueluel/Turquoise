@@ -151,6 +151,7 @@ modules:
       packages:
         - wdisplays # GUI for managing Wayland displays
         - waybar
+        - wf-recorder # Wayland screen recorder
         - xdg-desktop-portal-gtk # think already in base-main
         - xdg-desktop-portal-gnome # screencasting — Niri uses Smithay, not wlroots
         - xwayland-satellite
