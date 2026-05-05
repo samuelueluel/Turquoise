@@ -400,9 +400,6 @@ test-image IMAGE_URL="" DOTFILES_URL="":
     if [[ -n "$DOTFILES" ]]; then
         echo "Initializing dotfiles from $DOTFILES..."
         distrobox enter "$NAME" -- chezmoi init --apply "$DOTFILES"
-        # Force the guest to use 'Super' as the mod-key so it matches the host logic
-        echo "Configuring guest Niri to use 'Super' as mod-key..."
-        distrobox enter "$NAME" -- sed -i 's/input {/input {\n    mod-key "Super"/' ~/.config/niri/config.kdl
     fi
 
     # 5. Enter container
