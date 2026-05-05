@@ -393,7 +393,6 @@ modules:
         - papirus-icon-theme-dark # Needed for dark GTK themes
         - adw-gtk3-theme
         - xapp-symbolic-icons # Fixes broken symbolic icons in Nemo UI
-        - gnome-themes-extra # Provides Adwaita engine assets for GTK3 themes
         - qt6ct
         - qt5ct
         - qt6-qtwayland
