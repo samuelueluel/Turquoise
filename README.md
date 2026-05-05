@@ -27,13 +27,14 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 |---|---|
 | Compositor | Niri |
 | Bar | Waybar |
-| App Launcher | fsel |
+| App launcher | fsel |
 | Display manager | greetd + gtkgreet |
 | Shell | Zsh + Powerlevel10k + fzf-tab |
 | Terminals | Alacritty (primary), Kitty (for image previews in Yazi etc) |
 | Editor | Zed |
 | Browsers | Zen, Helium |
 | File manager | Yazi (launched in Kitty), Nemo (backup) |
+| Music | rmpc + MPD |
 | Cloud storage | Dropbox |
 | Kernel | [@kernel-vanilla/stable](https://copr.fedorainfracloud.org/coprs/g/kernel-vanilla/stable/) |
 | CLI tools | Homebrew (see `sjust brew`) |
@@ -106,16 +107,16 @@ An **Alt+WASD** navigation scheme is used across apps (up/down/left/right). Many
 | Key | Action |
 |---|---|
 | Alt+W / S | Scroll up / down one line |
-| Alt+A / D | Jump backward / forward one word (readline) |
+| Alt+A / D | Jump backward / forward one word |
 | Ctrl+W | Delete previous character |
 | Ctrl+Q | Delete previous word |
 | Alt+Q / E | Jump to beginning / end of line |
-| Shift+Return | Send Alt+Return escape sequence |
+| Shift+Enter | New line |
 | Ctrl+Shift+C / V | Copy / Paste |
 
 ### Yazi
 
-Yazi is launched by Mod+E as a floating Kitty window.
+Yazi is launched by Mod+E as a floating Kitty window that closes after selection. Use Mod+Ctrl+E for a permanent window.
 
 | Key | Action |
 |---|---|
@@ -123,11 +124,12 @@ Yazi is launched by Mod+E as a floating Kitty window.
 | Alt+A / D | Parent directory / open |
 | Alt+1–9 | Switch to tab 1–9 |
 | Ctrl+T / Q | New tab / close tab |
-| Ctrl+F | Fuzzy jump (fzf) |
-| Ctrl+G | Fuzzy jump to directory |
-| Ctrl+H | Search by content (ripgrep) |
-| Ctrl+S | Search by name (fd) |
-| Ctrl+N / B | Search Obsidian notes / grep note content and open in Obsidian |
+| Ctrl+F | Fuzzy jump to file |
+| Ctrl+G | Fuzzy jump to folder |
+| Ctrl+H | Grep to file |
+| Ctrl+J | Filter |
+| Ctrl+K | Zoxide |
+| Ctrl+N / B | Fuzzy search Obsidian notes / grep note content and open in Obsidian |
 | Ctrl+A | Create file or folder |
 | Ctrl+E | Rename |
 | Ctrl+Delete | Trash file |
@@ -135,8 +137,6 @@ Yazi is launched by Mod+E as a floating Kitty window.
 | Ctrl+Shift+P | Copy path of item to clipboard |
 | Ctrl+P | Visual mode |
 | Ctrl+. | Toggle hidden files |
-| Ctrl+K | Jump via zoxide |
-| Ctrl+J | Filter |
 | Ctrl+R | Reload |
 
 ### Zed
@@ -158,7 +158,7 @@ This assumes the full `sjust` sequence has been run and extensions enabled.
 | Key | Action |
 |---|---|
 | Alt+W / S | Move up / down tab list (custom extension) |
-| Alt+A / D | Next / previoius workspace |
+| Alt+A / D | Next / previous workspace |
 | Ctrl+Space | Command palette |
 | Ctrl+T / Q | New tab / close tab |
 | Ctrl+Shift+Q | Open last closed tab |
