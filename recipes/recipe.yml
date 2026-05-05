@@ -305,6 +305,7 @@ modules:
       packages:
         - mpv # think already in base-main
         - mpd # music player daemon (PipeWire-native via Fedora build)
+        - mpc # minimalist CLI client for mpd scripting
         - beets # music library manager and tagger
         - beets-plugins # extra beets plugins
         - beets-doc # beets documentation
