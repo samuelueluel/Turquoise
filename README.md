@@ -21,7 +21,7 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 
 ---
 
-## Packages in image
+## Packages in Image
 
 Not exhaustive. Essential system packages track the Fedora update cycle. Most everything else tracks the latest release.
 
