@@ -193,7 +193,8 @@ flatpaks:
         com.github.tchx84.Flatseal \
         io.github.flattool.Warehouse \
         io.github.kolunmi.Bazaar \
-        org.fedoraproject.MediaWriter
+        org.fedoraproject.MediaWriter \
+        com.github.PintaProject.Pinta
     flatpak override --user --filesystem=xdg-config/gtk-3.0:ro io.github.quodlibet.QuodLibet || true
     flatpak override --user --env=QT_QPA_PLATFORMTHEME=qt6ct --filesystem=xdg-config/qt6ct:ro --filesystem=xdg-data/color-schemes:ro org.kde.okular || true
 
@@ -313,13 +314,10 @@ update:
     systemctl --failed || true
 
     echo -e "\n\033[34m=== Empty Trash? ===\033[0m"
-    read -rp "  Empty trash? (y/n) " -n 1 REPLY; echo
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-        if command -v trash-empty >/dev/null; then
-            trash-empty
-        else
-            gio trash --empty || true
-        fi
+    if command -v trash-empty >/dev/null; then
+        trash-empty
+    else
+        gio trash --empty || true
     fi
 
     echo -e "\n\033[34m=== Staging Image Update (bootc upgrade) ===\033[0m"

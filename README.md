@@ -52,7 +52,7 @@ Not exhaustive. Essential system packages track the Fedora update cycle. Most ev
 
 ### 1. Install Fedora Silverblue
 
-- Filesystem: **XFS** 
+- Filesystem: **XFS** (XFS maintenance timers are pre-configured, though choosing a different file system won't break anything)
 - Disable Secure Boot in UEFI (the kernel cannot be signed)
 
 ### 2. Rebase to this image
