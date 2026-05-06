@@ -30,7 +30,7 @@ dirs:
         {{HOME}}/.npm-global/bin
     chmod 700 {{HOME}}/.ssh
 
-# Register Zen profiles and create .desktop launchers (optional; before chezmoi)
+# Register Zen profiles, create .desktop launchers, set zen-utility as default browser (optional; before chezmoi)
 zen:
     #!/usr/bin/env bash
     set -euo pipefail
