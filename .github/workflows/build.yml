@@ -1,8 +1,9 @@
 name: bluebuild
 on:
   schedule:
-    - cron: "00 06 * * *" # build at 06:00 UTC daily
-                           # (20 min after ublue base images rebuild)
+    - cron:
+        "00 06 * * *" # build at 06:00 UTC daily
+        # (20 min after ublue base images rebuild)
   push:
     paths-ignore:
       - "**.md"
@@ -28,10 +29,12 @@ jobs:
           - recipe.yml
     steps:
       - name: Build Custom Image
-        uses: blue-build/github-action@v1
+        uses: blue-build/github-action@main # testing --- changes v1 to main
         with:
           recipe: ${{ matrix.recipe }}
           cosign_private_key: ${{ secrets.SIGNING_SECRET }}
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
+          verify_install: true # testing --- may be source of errors; delete this line if so
+          build_chunked_oci: true # testing --- this may cause failure especially due to size constraint; delete this line if that happens
