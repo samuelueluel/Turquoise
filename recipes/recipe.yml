@@ -189,6 +189,15 @@ modules:
   # ── Terminals + shell ─────────────────────────────────────────────────────
   # Note: powerlevel10k and fzf-tab managed via dotfiles; most CLI stuff in Brewfile
   - type: dnf
+    repos:
+      copr:
+        - scottames/ghostty
+    install:
+      install-weak-deps: false
+      packages:
+        - ghostty
+
+  - type: dnf
     install:
       install-weak-deps: false
       packages:
