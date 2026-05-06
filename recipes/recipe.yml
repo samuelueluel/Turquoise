@@ -706,6 +706,7 @@ modules:
     user:
       enabled:
         # dropbox.service: Dropbox RPM doesn't ship a systemd unit; use XDG autostart instead
+        - app-com.mitchellh.ghostty.service
         - pipewire.service
         - pipewire-pulse.service
         - wireplumber.service
