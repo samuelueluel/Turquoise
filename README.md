@@ -100,16 +100,18 @@ Log out and back in after setup to activate the new shell and Homebrew PATH.
 
 An **Alt+WASD** navigation scheme is used across apps (up/down/left/right). Many default keybinds are remapped or disabled accordingly. Below is not exhaustive.
 
-### Alacritty
+### Ghostty
 
 | Key | Action |
 |---|---|
-| Alt+W / S | Scroll up / down one line |
+| Alt+W / S | Up / down arrow |
 | Alt+A / D | Jump backward / forward one word |
 | Ctrl+W | Delete previous character |
 | Ctrl+Q | Delete previous word |
-| Alt+Q / E | Jump to beginning / end of line |
+| Alt+Q / E | Move backward / forward one character |
 | Shift+Enter | New line |
+| Ctrl+C | Copy (when text selected) |
+| Ctrl+V | Paste |
 | Ctrl+Shift+C / V | Copy / Paste |
 
 ### Yazi
@@ -131,9 +133,9 @@ Yazi is launched by Mod+E as a floating Kitty window that closes after selection
 | Ctrl+A | Create file or folder |
 | Ctrl+E | Rename |
 | Ctrl+Delete | Trash file |
-| Ctrl+Shift+C / X / V | Copy / cut / paste |
-| Ctrl+Shift+P | Copy path of item to clipboard |
-| Ctrl+P | Visual mode |
+| Ctrl+C / X / V | Copy / cut / paste |
+| Ctrl+P | Copy path of item to clipboard |
+| Ctrl+Shift+P | Visual mode |
 | Ctrl+. | Toggle hidden files |
 | Ctrl+R | Reload |
 
