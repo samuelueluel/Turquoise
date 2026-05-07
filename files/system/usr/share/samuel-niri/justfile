@@ -96,6 +96,8 @@ chezmoi:
     chezmoi init --source="$HOME/dotfiles"
     chezmoi apply --force
     systemctl --user enable empty-trash.service battery-notify.service || true
+    gsettings set org.gnome.desktop.interface icon-theme Papirus
+    gsettings set org.gnome.desktop.interface cursor-theme oreo_spark_orange_cursors
 
 # Install Zen Browser extensions into each profile (optional; after chezmoi)
 zen-extensions:
