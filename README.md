@@ -52,7 +52,7 @@ Not exhaustive. Essential system packages track the Fedora update cycle. Most ev
 
 ### 1. Install Fedora Silverblue
 
-- Filesystem: **XFS** (XFS maintenance timers are pre-configured, though choosing a different file system won't break anything)
+- Filesystem: XFS (maintenance timers for XFS are pre-configured, though choosing a different file system won't break anything)
 - Disable Secure Boot in UEFI (the kernel cannot be signed)
 
 ### 2. Rebase to this image
@@ -98,7 +98,7 @@ Log out and back in after setup to activate the new shell and Homebrew PATH.
 
 **CapsLock is Mod.** Press **Mod+/** for the full niri keybind dashboard.
 
-An **Alt+WASD** navigation scheme is used across apps (up/down/left/right). Many default keybinds are remapped or disabled accordingly. Below is not exhaustive.
+An **Alt+WASD** navigation scheme is used across apps (up/down/left/right). Many default keybinds are remapped or disabled accordingly. Below is not exhaustive. 
 
 ### Ghostty
 
@@ -108,7 +108,7 @@ An **Alt+WASD** navigation scheme is used across apps (up/down/left/right). Many
 | Alt+A / D | Jump backward / forward one word |
 | Ctrl+W | Delete previous character |
 | Ctrl+Q | Delete previous word |
-| Alt+Q / E | Move backward / forward one character |
+| Alt+Q / E | Jump to start / end of line |
 | Shift+Enter | New line |
 | Ctrl+C | Copy (when text selected) |
 | Ctrl+V | Paste |
@@ -116,7 +116,7 @@ An **Alt+WASD** navigation scheme is used across apps (up/down/left/right). Many
 
 ### Yazi
 
-Yazi is launched by Mod+E as a floating Kitty window that closes after selection. Use Mod+Ctrl+E for a permanent window.
+Yazi is launched by Mod+E as a floating Kitty window that closes after selection. Use Mod+Ctrl+E for a permanent window. Kitty itself has most keybinds no-op'd to not conflict with custom TUI keybinds.
 
 | Key | Action |
 |---|---|

@@ -353,3 +353,89 @@ update:
     fwupdmgr refresh && fwupdmgr get-updates || true
 
     echo -e "\n\033[32mUpdate sequence complete!\033[0m"
+
+# Diagnose fresh-install issues (cursor/icons on samuel-test). Output is compact PASS/FAIL lines.
+check:
+    #!/usr/bin/env bash
+    # No `set -e` — every check should run even if one fails.
+    pass() { printf "  \033[32mPASS\033[0m  %-18s %s\n" "$1" "$2"; }
+    fail() { printf "  \033[31mFAIL\033[0m  %-18s %s\n" "$1" "$2"; }
+    info() { printf "  \033[33mINFO\033[0m  %-18s %s\n" "$1" "$2"; }
+
+    echo -e "\033[34m=== Fresh-install diagnostic ===\033[0m"
+    echo "user: $(whoami)   host: $(hostname)   date: $(date '+%F %T')"
+    echo
+
+    echo -e "\033[34m[1] gsettings (fix #4 — must persist)\033[0m"
+    ICON=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null | tr -d "'")
+    CURS=$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null | tr -d "'")
+    [[ "$ICON" == "Papirus" ]] && pass "icon-theme" "$ICON" || fail "icon-theme" "got '$ICON' (want Papirus)"
+    [[ "$CURS" == "oreo_spark_orange_cursors" ]] && pass "cursor-theme" "$CURS" || fail "cursor-theme" "got '$CURS' (want oreo_spark_orange_cursors)"
+
+    echo
+    echo -e "\033[34m[2] waybar runtime env (cursor/icon inheritance)\033[0m"
+    WPID=$(pgrep -x waybar | head -1)
+    if [[ -z "$WPID" ]]; then
+        fail "waybar pid" "not running"
+    else
+        info "waybar pid" "$WPID"
+        WENV=$(tr '\0' '\n' < /proc/$WPID/environ 2>/dev/null)
+        WX=$(echo "$WENV" | grep '^XCURSOR_THEME=' | cut -d= -f2-)
+        WS=$(echo "$WENV" | grep '^XCURSOR_SIZE='  | cut -d= -f2-)
+        [[ "$WX" == "oreo_spark_orange_cursors" ]] && pass "XCURSOR_THEME" "$WX" || fail "XCURSOR_THEME" "got '${WX:-<unset>}' — bar-bg cursor bug"
+        [[ -n "$WS" ]] && pass "XCURSOR_SIZE" "$WS" || fail "XCURSOR_SIZE" "<unset>"
+        GE=$(echo "$WENV" | grep -E '^GTK_(THEME|ICON)' || true)
+        [[ -n "$GE" ]] && info "waybar GTK_*" "$(echo "$GE" | tr '\n' ' ')" || info "waybar GTK_*" "<none set>"
+    fi
+
+    echo
+    echo -e "\033[34m[3] niri config + cursor/env blocks\033[0m"
+    if [[ -e "$HOME/.config/niri/config.kdl" ]]; then
+        pass "config.kdl" "present"
+        grep -q 'xcursor-theme "oreo_spark_orange_cursors"' "$HOME/.config/niri/config.kdl" \
+            && pass "cursor block" "set" || fail "cursor block" "missing"
+        grep -q 'XCURSOR_THEME "oreo_spark_orange_cursors"' "$HOME/.config/niri/config.kdl" \
+            && pass "environment block" "set" || fail "environment block" "missing"
+    else
+        fail "config.kdl" "missing — chezmoi never applied"
+    fi
+
+    echo
+    echo -e "\033[34m[4] icon/cursor themes available system-wide\033[0m"
+    [[ -d /usr/share/icons/oreo_spark_orange_cursors/cursors ]] && pass "oreo theme" "present" || fail "oreo theme" "MISSING"
+    [[ -d /usr/share/icons/Papirus ]] && pass "Papirus theme" "present" || fail "Papirus theme" "MISSING"
+    [[ -e /usr/share/icons/default/index.theme ]] && pass "default index" "$(grep -i ^Inherits /usr/share/icons/default/index.theme || echo unset)" || fail "default index" "missing"
+
+    echo
+    echo -e "\033[34m[5] sjust setup state\033[0m"
+    [[ -d "$HOME/dotfiles/.git" ]] && pass "dotfiles repo" "present" || fail "dotfiles repo" "missing — sjust chezmoi not run"
+    if command -v chezmoi &>/dev/null; then
+        CMC=$(chezmoi managed --include=files 2>/dev/null | wc -l)
+        [[ "$CMC" -gt 0 ]] && pass "chezmoi managed" "$CMC files" || fail "chezmoi managed" "0 files"
+    else
+        fail "chezmoi" "not installed"
+    fi
+
+    echo
+    echo -e "\033[34m[6] GTK overrides (could mask Papirus)\033[0m"
+    if [[ -e "$HOME/.config/gtk-4.0/settings.ini" ]]; then
+        info "gtk-4.0 ini" "present"
+        grep -E 'gtk-(icon-theme|cursor-theme)-name' "$HOME/.config/gtk-4.0/settings.ini" 2>/dev/null | sed 's/^/      /'
+    else
+        info "gtk-4.0 ini" "absent (OK — gsettings is authoritative)"
+    fi
+    if [[ -e "$HOME/.config/gtk-3.0/settings.ini" ]]; then
+        info "gtk-3.0 ini" "present"
+        grep -E 'gtk-(icon-theme|cursor-theme)-name' "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null | sed 's/^/      /'
+    else
+        info "gtk-3.0 ini" "absent"
+    fi
+
+    echo
+    echo -e "\033[34m=== Quick interpretation ===\033[0m"
+    echo "  [1] both PASS  → fix #4 ran and persisted"
+    echo "  [1] icon FAIL  → \`sjust chezmoi\` gsettings did not stick (dbus/dconf timing)"
+    echo "  [2] XCURSOR FAIL → bar-bg cursor bug confirmed; restart waybar after env applies"
+    echo "  [3] env block missing → niri started before chezmoi applied"
+    echo "  [4] any FAIL   → image build dropped a theme package"
+    echo "  [6] gtk ini overrides Papirus → remove or align with gsettings"
