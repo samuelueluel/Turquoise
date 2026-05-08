@@ -666,6 +666,10 @@ modules:
       disabled:
         # gdm.service and sddm.service removed: not present in base
         - rpm-ostreed-automatic.timer
+        - rpm-ostree-countme.timer
+        - flatpak-system-update.timer
+        - flatpak-user-update.timer
+        - brew-update.timer
     user:
       enabled:
         # dropbox.service: Dropbox RPM doesn't ship a systemd unit; use XDG autostart instead
