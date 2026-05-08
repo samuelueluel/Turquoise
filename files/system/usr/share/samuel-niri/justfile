@@ -70,13 +70,6 @@ zen:
         chmod +x "$FILE"
     done
 
-    mkdir -p "$HOME/.local/share/icons/hicolor/64x64/apps"
-    for profile in personal utility work; do
-        ln -sf /usr/share/icons/Papirus/64x64/apps/zen-browser.svg \
-            "$HOME/.local/share/icons/hicolor/64x64/apps/zen-$profile.svg"
-    done
-    gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
-
     xdg-settings set default-web-browser zen-utility.desktop 2>/dev/null || true
     for mime in x-scheme-handler/http x-scheme-handler/https text/html \
                 application/xhtml+xml application/x-extension-html \
