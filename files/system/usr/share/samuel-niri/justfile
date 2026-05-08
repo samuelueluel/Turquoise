@@ -354,88 +354,186 @@ update:
 
     echo -e "\n\033[32mUpdate sequence complete!\033[0m"
 
-# Diagnose fresh-install issues (cursor/icons on samuel-test). Output is compact PASS/FAIL lines.
+# Diagnose fresh-install issues; each check emits one letter so the final CODE string can be memorized and reported back.
 check:
     #!/usr/bin/env bash
-    # No `set -e` — every check should run even if one fails.
-    pass() { printf "  \033[32mPASS\033[0m  %-18s %s\n" "$1" "$2"; }
-    fail() { printf "  \033[31mFAIL\033[0m  %-18s %s\n" "$1" "$2"; }
-    info() { printf "  \033[33mINFO\033[0m  %-18s %s\n" "$1" "$2"; }
+    # No `set -e` — every check must run even if one fails.
 
-    echo -e "\033[34m=== Fresh-install diagnostic ===\033[0m"
+    CODE=""
+    # row(letter, name, value, legend) → prints colored row, appends letter to CODE.
+    row() {
+        local L=$1 NAME=$2 VAL=$3 LEG=$4 COLOR
+        case "$L" in
+            P|O|Y|R|S|M) COLOR=32 ;;   # green = expected/good
+            U|N|Z|F)     COLOR=31 ;;   # red   = unexpected/bad
+            A|X|I)       COLOR=33 ;;   # yellow= other / informational
+            *)           COLOR=37 ;;
+        esac
+        printf "  \033[%sm[%s]\033[0m %-26s %-32s \033[90m%s\033[0m\n" "$COLOR" "$L" "$NAME" "$VAL" "$LEG"
+        CODE+="$L"
+    }
+
+    echo -e "\033[34m=== sjust check ===\033[0m"
     echo "user: $(whoami)   host: $(hostname)   date: $(date '+%F %T')"
     echo
 
-    echo -e "\033[34m[1] gsettings (fix #4 — must persist)\033[0m"
+    echo -e "\033[34m[A] gsettings\033[0m"
     ICON=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null | tr -d "'")
+    case "$ICON" in
+        Papirus) row P "icon-theme" "$ICON"     "P=Papirus A=Adwaita X=other M=missing" ;;
+        Adwaita) row A "icon-theme" "$ICON"     "P=Papirus A=Adwaita X=other M=missing" ;;
+        "")      row M "icon-theme" "<missing>" "P=Papirus A=Adwaita X=other M=missing" ;;
+        *)       row X "icon-theme" "$ICON"     "P=Papirus A=Adwaita X=other M=missing" ;;
+    esac
     CURS=$(gsettings get org.gnome.desktop.interface cursor-theme 2>/dev/null | tr -d "'")
-    [[ "$ICON" == "Papirus" ]] && pass "icon-theme" "$ICON" || fail "icon-theme" "got '$ICON' (want Papirus)"
-    [[ "$CURS" == "oreo_spark_orange_cursors" ]] && pass "cursor-theme" "$CURS" || fail "cursor-theme" "got '$CURS' (want oreo_spark_orange_cursors)"
+    case "$CURS" in
+        oreo_spark_orange_cursors) row O "cursor-theme" "$CURS"     "O=oreo A=Adwaita X=other M=missing" ;;
+        Adwaita)                   row A "cursor-theme" "$CURS"     "O=oreo A=Adwaita X=other M=missing" ;;
+        "")                        row M "cursor-theme" "<missing>" "O=oreo A=Adwaita X=other M=missing" ;;
+        *)                         row X "cursor-theme" "$CURS"     "O=oreo A=Adwaita X=other M=missing" ;;
+    esac
 
     echo
-    echo -e "\033[34m[2] waybar runtime env (cursor/icon inheritance)\033[0m"
+    echo -e "\033[34m[B] Waybar runtime env\033[0m"
     WPID=$(pgrep -x waybar | head -1)
     if [[ -z "$WPID" ]]; then
-        fail "waybar pid" "not running"
+        row N "waybar pid"           "<not running>" "R=running N=not running"
+        row N "waybar XCURSOR_THEME" "<no waybar>"   "O=oreo U=unset X=other N=no waybar"
+        row N "waybar GTK_ICON_TH"   "<no waybar>"   "S=set U=unset N=no waybar"
+        row N "waybar GTK_THEME"     "<no waybar>"   "S=set U=unset N=no waybar"
     else
-        info "waybar pid" "$WPID"
+        row R "waybar pid"           "pid $WPID"     "R=running N=not running"
         WENV=$(tr '\0' '\n' < /proc/$WPID/environ 2>/dev/null)
         WX=$(echo "$WENV" | grep '^XCURSOR_THEME=' | cut -d= -f2-)
-        WS=$(echo "$WENV" | grep '^XCURSOR_SIZE='  | cut -d= -f2-)
-        [[ "$WX" == "oreo_spark_orange_cursors" ]] && pass "XCURSOR_THEME" "$WX" || fail "XCURSOR_THEME" "got '${WX:-<unset>}' — bar-bg cursor bug"
-        [[ -n "$WS" ]] && pass "XCURSOR_SIZE" "$WS" || fail "XCURSOR_SIZE" "<unset>"
-        GE=$(echo "$WENV" | grep -E '^GTK_(THEME|ICON)' || true)
-        [[ -n "$GE" ]] && info "waybar GTK_*" "$(echo "$GE" | tr '\n' ' ')" || info "waybar GTK_*" "<none set>"
+        case "$WX" in
+            oreo_spark_orange_cursors) row O "waybar XCURSOR_THEME" "$WX"       "O=oreo U=unset X=other N=no waybar" ;;
+            "")                        row U "waybar XCURSOR_THEME" "<unset>"   "O=oreo U=unset X=other N=no waybar" ;;
+            *)                         row X "waybar XCURSOR_THEME" "$WX"       "O=oreo U=unset X=other N=no waybar" ;;
+        esac
+        WGI=$(echo "$WENV" | grep '^GTK_ICON_THEME=' | cut -d= -f2-)
+        [[ -n "$WGI" ]] && row S "waybar GTK_ICON_TH" "$WGI"     "S=set U=unset N=no waybar" \
+                        || row U "waybar GTK_ICON_TH" "<unset>"  "S=set U=unset N=no waybar"
+        WGT=$(echo "$WENV" | grep '^GTK_THEME=' | cut -d= -f2-)
+        [[ -n "$WGT" ]] && row S "waybar GTK_THEME"   "$WGT"     "S=set U=unset N=no waybar" \
+                        || row U "waybar GTK_THEME"   "<unset>"  "S=set U=unset N=no waybar"
     fi
 
     echo
-    echo -e "\033[34m[3] niri config + cursor/env blocks\033[0m"
-    if [[ -e "$HOME/.config/niri/config.kdl" ]]; then
-        pass "config.kdl" "present"
-        grep -q 'xcursor-theme "oreo_spark_orange_cursors"' "$HOME/.config/niri/config.kdl" \
-            && pass "cursor block" "set" || fail "cursor block" "missing"
-        grep -q 'XCURSOR_THEME "oreo_spark_orange_cursors"' "$HOME/.config/niri/config.kdl" \
-            && pass "environment block" "set" || fail "environment block" "missing"
+    echo -e "\033[34m[C] niri config\033[0m"
+    NCFG="$HOME/.config/niri/config.kdl"
+    if [[ -e "$NCFG" ]]; then
+        row Y "niri config.kdl"       "present" "Y=present N=missing"
+        grep -q 'xcursor-theme "oreo_spark_orange_cursors"' "$NCFG" \
+            && row Y "niri cursor block"  "set"     "Y=set N=missing F=cfg missing" \
+            || row N "niri cursor block"  "missing" "Y=set N=missing F=cfg missing"
+        grep -q 'XCURSOR_THEME "oreo_spark_orange_cursors"' "$NCFG" \
+            && row Y "niri env block"     "set"     "Y=set N=missing F=cfg missing" \
+            || row N "niri env block"     "missing" "Y=set N=missing F=cfg missing"
     else
-        fail "config.kdl" "missing — chezmoi never applied"
+        row N "niri config.kdl"   "<missing>"  "Y=present N=missing"
+        row F "niri cursor block" "<no cfg>"   "Y=set N=missing F=cfg missing"
+        row F "niri env block"    "<no cfg>"   "Y=set N=missing F=cfg missing"
     fi
 
     echo
-    echo -e "\033[34m[4] icon/cursor themes available system-wide\033[0m"
-    [[ -d /usr/share/icons/oreo_spark_orange_cursors/cursors ]] && pass "oreo theme" "present" || fail "oreo theme" "MISSING"
-    [[ -d /usr/share/icons/Papirus ]] && pass "Papirus theme" "present" || fail "Papirus theme" "MISSING"
-    [[ -e /usr/share/icons/default/index.theme ]] && pass "default index" "$(grep -i ^Inherits /usr/share/icons/default/index.theme || echo unset)" || fail "default index" "missing"
+    echo -e "\033[34m[D] system themes & default cursor\033[0m"
+    [[ -d /usr/share/icons/oreo_spark_orange_cursors/cursors ]] \
+        && row Y "oreo theme"     "installed" "Y=present N=missing" \
+        || row N "oreo theme"     "<missing>" "Y=present N=missing"
+    [[ -d /usr/share/icons/Papirus ]] \
+        && row Y "Papirus theme"  "installed" "Y=present N=missing" \
+        || row N "Papirus theme"  "<missing>" "Y=present N=missing"
+    PCACHE=/usr/share/icons/Papirus/icon-theme.cache
+    if [[ -e "$PCACHE" ]]; then
+        if [[ "$PCACHE" -ot /usr/share/icons/Papirus/index.theme ]]; then
+            row F "Papirus icon cache" "stale (older than index.theme)" "Y=fresh F=stale N=missing"
+        else
+            row Y "Papirus icon cache" "fresh"   "Y=fresh F=stale N=missing"
+        fi
+    else
+        row N "Papirus icon cache" "<missing>"   "Y=fresh F=stale N=missing"
+    fi
+    DIDX=/usr/share/icons/default/index.theme
+    if [[ -e "$DIDX" ]] && grep -qi '^Inherits.*oreo' "$DIDX"; then
+        row Y "default cursor inh" "Inherits=oreo" "Y=oreo N=other/missing"
+    else
+        row N "default cursor inh" "$([[ -e $DIDX ]] && grep -i ^Inherits "$DIDX" || echo missing)" "Y=oreo N=other/missing"
+    fi
 
     echo
-    echo -e "\033[34m[5] sjust setup state\033[0m"
-    [[ -d "$HOME/dotfiles/.git" ]] && pass "dotfiles repo" "present" || fail "dotfiles repo" "missing — sjust chezmoi not run"
+    echo -e "\033[34m[E] per-user overrides (could mask Papirus / cursor)\033[0m"
+    [[ -d "$HOME/.icons" ]] \
+        && row Y "~/.icons override"      "exists (could mask)" "N=absent(good) Y=exists" \
+        || row N "~/.icons override"      "absent"              "N=absent(good) Y=exists"
+    [[ -d "$HOME/.local/share/icons" ]] \
+        && row Y "~/.local/share/icons"   "exists (could mask)" "N=absent(good) Y=exists" \
+        || row N "~/.local/share/icons"   "absent"              "N=absent(good) Y=exists"
+    G4="$HOME/.config/gtk-4.0/settings.ini"
+    if [[ -e "$G4" ]]; then
+        IT4=$(grep -E '^gtk-icon-theme-name' "$G4" 2>/dev/null | cut -d= -f2- | tr -d ' ')
+        case "$IT4" in
+            Papirus*) row P "gtk-4.0 icon-theme" "$IT4"  "P=Papirus X=other M=missing/absent" ;;
+            "")       row M "gtk-4.0 icon-theme" "<not in ini>" "P=Papirus X=other M=missing/absent" ;;
+            *)        row X "gtk-4.0 icon-theme" "$IT4"  "P=Papirus X=other M=missing/absent" ;;
+        esac
+    else
+        row M "gtk-4.0 icon-theme" "<no ini>" "P=Papirus X=other M=missing/absent"
+    fi
+    G3="$HOME/.config/gtk-3.0/settings.ini"
+    if [[ -e "$G3" ]]; then
+        IT3=$(grep -E '^gtk-icon-theme-name' "$G3" 2>/dev/null | cut -d= -f2- | tr -d ' ')
+        case "$IT3" in
+            Papirus*) row P "gtk-3.0 icon-theme" "$IT3"  "P=Papirus X=other M=missing/absent" ;;
+            "")       row M "gtk-3.0 icon-theme" "<not in ini>" "P=Papirus X=other M=missing/absent" ;;
+            *)        row X "gtk-3.0 icon-theme" "$IT3"  "P=Papirus X=other M=missing/absent" ;;
+        esac
+    else
+        row M "gtk-3.0 icon-theme" "<no ini>" "P=Papirus X=other M=missing/absent"
+    fi
+
+    echo
+    echo -e "\033[34m[F] systemd user env propagation\033[0m"
+    EDOT="$HOME/.config/environment.d/10-cursor.conf"
+    [[ -e "$EDOT" ]] \
+        && row Y "env.d/10-cursor.conf"   "present" "Y=present N=missing" \
+        || row N "env.d/10-cursor.conf"   "missing" "Y=present N=missing"
+    SXC=$(systemctl --user show-environment 2>/dev/null | grep '^XCURSOR_THEME=' | cut -d= -f2-)
+    case "$SXC" in
+        oreo_spark_orange_cursors) row O "user-mgr XCURSOR_THEME" "$SXC"     "O=oreo U=unset X=other" ;;
+        "")                        row U "user-mgr XCURSOR_THEME" "<unset>"  "O=oreo U=unset X=other" ;;
+        *)                         row X "user-mgr XCURSOR_THEME" "$SXC"     "O=oreo U=unset X=other" ;;
+    esac
+    SYSENV=$(ls /etc/environment.d/*cursor*.conf 2>/dev/null | head -1)
+    [[ -n "$SYSENV" ]] \
+        && row Y "system env.d cursor"    "$SYSENV"  "Y=present N=missing" \
+        || row N "system env.d cursor"    "absent"   "Y=present N=missing"
+
+    echo
+    echo -e "\033[34m[G] sjust setup state\033[0m"
+    [[ -d "$HOME/dotfiles/.git" ]] \
+        && row Y "dotfiles repo"     "present" "Y=present N=missing" \
+        || row N "dotfiles repo"     "missing" "Y=present N=missing"
     if command -v chezmoi &>/dev/null; then
         CMC=$(chezmoi managed --include=files 2>/dev/null | wc -l)
-        [[ "$CMC" -gt 0 ]] && pass "chezmoi managed" "$CMC files" || fail "chezmoi managed" "0 files"
+        [[ "$CMC" -gt 0 ]] \
+            && row M "chezmoi managed"  "$CMC files" "M=many(>0) Z=zero N=not installed" \
+            || row Z "chezmoi managed"  "0 files"    "M=many(>0) Z=zero N=not installed"
     else
-        fail "chezmoi" "not installed"
+        row N "chezmoi managed" "<no chezmoi>" "M=many(>0) Z=zero N=not installed"
     fi
 
     echo
-    echo -e "\033[34m[6] GTK overrides (could mask Papirus)\033[0m"
-    if [[ -e "$HOME/.config/gtk-4.0/settings.ini" ]]; then
-        info "gtk-4.0 ini" "present"
-        grep -E 'gtk-(icon-theme|cursor-theme)-name' "$HOME/.config/gtk-4.0/settings.ini" 2>/dev/null | sed 's/^/      /'
-    else
-        info "gtk-4.0 ini" "absent (OK — gsettings is authoritative)"
-    fi
-    if [[ -e "$HOME/.config/gtk-3.0/settings.ini" ]]; then
-        info "gtk-3.0 ini" "present"
-        grep -E 'gtk-(icon-theme|cursor-theme)-name' "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null | sed 's/^/      /'
-    else
-        info "gtk-3.0 ini" "absent"
-    fi
-
+    echo -e "\033[34m=== CODE (read this aloud) ===\033[0m"
+    # Group as A(2) B(4) C(3) D(4) E(4) F(3) G(2) = 22 chars total.
+    A=${CODE:0:2}; B=${CODE:2:4}; C=${CODE:6:3}; D=${CODE:9:4}
+    E=${CODE:13:4}; F=${CODE:17:3}; G=${CODE:20:2}
+    echo -e "  \033[1;36m$A $B $C $D $E $F $G\033[0m"
     echo
-    echo -e "\033[34m=== Quick interpretation ===\033[0m"
-    echo "  [1] both PASS  → fix #4 ran and persisted"
-    echo "  [1] icon FAIL  → \`sjust chezmoi\` gsettings did not stick (dbus/dconf timing)"
-    echo "  [2] XCURSOR FAIL → bar-bg cursor bug confirmed; restart waybar after env applies"
-    echo "  [3] env block missing → niri started before chezmoi applied"
-    echo "  [4] any FAIL   → image build dropped a theme package"
-    echo "  [6] gtk ini overrides Papirus → remove or align with gsettings"
+    echo "  positions:  A1 A2  B1 B2 B3 B4  C1 C2 C3  D1 D2 D3 D4  E1 E2 E3 E4  F1 F2 F3  G1 G2"
+    echo "  A: gsettings (icon, cursor)"
+    echo "  B: waybar env (pid, XCURSOR_THEME, GTK_ICON_THEME, GTK_THEME)"
+    echo "  C: niri config (config.kdl, cursor block, env block)"
+    echo "  D: system themes (oreo, Papirus, Papirus cache, default cursor inherit)"
+    echo "  E: per-user overrides (~/.icons, ~/.local/share/icons, gtk-4.0 ini, gtk-3.0 ini)"
+    echo "  F: user-mgr env (env.d/10-cursor.conf, XCURSOR in user-mgr, system env.d)"
+    echo "  G: setup (dotfiles repo, chezmoi managed)"
