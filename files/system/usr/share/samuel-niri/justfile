@@ -12,6 +12,10 @@ default:
 # Full setup — run everything in order
 setup: dirs zen chezmoi zen-extensions brew flatpaks system
     update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
+    # Restart Waybar so it picks up the correct GTK icon theme + custom .desktop files
+    pkill -u "$USER" waybar 2>/dev/null || true
+    sleep 0.5
+    waybar &>/dev/null & disown $!
     @echo ""
     @echo "Done. Manual steps remaining:"
     @echo "  - Log out and back in for group changes to take effect"
@@ -48,7 +52,7 @@ zen:
         '[Profile2]' 'Name=work' 'IsRelative=1' 'Path=zen.work' \
         > "{{ZEN_DIR}}/profiles.ini"
 
-    declare -A ICONS=( ["personal"]="a7xpg" ["utility"]="braindump" ["work"]="applications-office" )
+    declare -A ICONS=( ["personal"]="/usr/share/icons/Papirus/48x48/apps/a7xpg.svg" ["utility"]="/usr/share/icons/Papirus/48x48/apps/braindump.svg" ["work"]="/usr/share/icons/Papirus/48x48/apps/applications-office.svg" )
     declare -A NAMES=( ["personal"]="Personal" ["utility"]="Utility" ["work"]="Work" )
     for profile in personal utility work; do
         CAP="${NAMES[$profile]}"
