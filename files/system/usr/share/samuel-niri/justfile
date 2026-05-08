@@ -12,6 +12,8 @@ default:
 # Full setup — run everything in order
 setup: dirs zen chezmoi zen-extensions brew flatpaks system
     update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
+    gtk-update-icon-cache -f -t /usr/share/icons/oreo_spark_orange_cursors 2>/dev/null || true
+    gtk-update-icon-cache -f -t /usr/share/icons/Papirus 2>/dev/null || true
     # Restart Waybar so it picks up the correct GTK icon theme + custom .desktop files
     pkill -u "$USER" waybar 2>/dev/null || true
     sleep 0.5
