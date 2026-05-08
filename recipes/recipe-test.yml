@@ -90,17 +90,17 @@ modules:
   # Uses replace (distro-sync) so the COPR version wins even if base image
   # already has the same or older version installed.
   # Secure Boot validation must be disabled in BIOS (verified disabled).
-  - type: dnf
-    repos:
-      copr:
-        - "@kernel-vanilla/stable"
-    replace:
-      - from-repo: copr:copr.fedorainfracloud.org:group_kernel-vanilla:stable
-        packages:
-          - kernel
-          - kernel-core
-          - kernel-modules
-          - kernel-modules-extra
+  # - type: dnf
+  #   repos:
+  #     copr:
+  #       - "@kernel-vanilla/stable"
+  #   replace:
+  #     - from-repo: copr:copr.fedorainfracloud.org:group_kernel-vanilla:stable
+  #       packages:
+  #         - kernel
+  #         - kernel-core
+  #         - kernel-modules
+  #         - kernel-modules-extra
 
   # ── COPR + external repos, plus their packages ────────────────────────────
   - type: dnf
