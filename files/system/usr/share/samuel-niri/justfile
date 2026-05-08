@@ -406,10 +406,10 @@ check:
 
     echo
     echo -e "\033[34m[B2] XDG desktop portals\033[0m"
-    pgrep -x xdg-desktop-portal     >/dev/null 2>&1 && row R "xdg-desktop-portal"     "running" "R=running N=not running" \
-                                                     || row N "xdg-desktop-portal"     "not running" "R=running N=not running"
-    pgrep -x xdg-desktop-portal-gtk >/dev/null 2>&1 && row R "xdg-desktop-portal-gtk" "running" "R=running N=not running" \
-                                                     || row N "xdg-desktop-portal-gtk" "not running" "R=running N=not running"
+    pgrep -f "xdg-desktop-portal$"     >/dev/null 2>&1 && row R "xdg-desktop-portal"     "running" "R=running N=not running" \
+                                                       || row N "xdg-desktop-portal"     "not running" "R=running N=not running"
+    pgrep -f "xdg-desktop-portal-gtk"  >/dev/null 2>&1 && row R "xdg-desktop-portal-gtk" "running" "R=running N=not running" \
+                                                        || row N "xdg-desktop-portal-gtk" "not running" "R=running N=not running"
 
     echo
     echo -e "\033[34m[C] niri config cursor entries\033[0m"
