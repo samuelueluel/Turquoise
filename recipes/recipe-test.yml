@@ -86,11 +86,6 @@ modules:
         - bash-completion # Autocompletion for bash/system utilities
         - wget2 # Command-line file downloader
 
-  - type: script
-    scripts:
-      - fix-sysusers.sh
-
-  # ── Stable kernel (kernel-vanilla/stable) ────────────────────────────────
   # Replaces the base kernel with latest upstream stable release.
   # Uses replace (distro-sync) so the COPR version wins even if base image
   # already has the same or older version installed.
@@ -660,6 +655,7 @@ modules:
     scripts:
       - setup-selinux-test.sh
       - hide-duplicate-desktops.sh
+      - fix-sysusers.sh
 
   # ── Systemd services ──────────────────────────────────────────────────────
   - type: systemd
