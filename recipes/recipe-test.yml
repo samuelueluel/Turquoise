@@ -656,6 +656,7 @@ modules:
       - setup-selinux-test.sh
       - hide-duplicate-desktops.sh
       - fix-sysusers.sh
+      - fix-rtkit-sysusers.sh
 
   # ── Systemd services ──────────────────────────────────────────────────────
   - type: systemd
