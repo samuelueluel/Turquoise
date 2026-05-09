@@ -27,7 +27,6 @@ jobs:
       matrix:
         recipe:
           - recipe.yml
-          - recipe-test.yml
     steps:
       - name: Build Custom Image
         uses: blue-build/github-action@main # testing --- changes v1 to main
