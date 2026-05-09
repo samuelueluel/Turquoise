@@ -452,11 +452,14 @@ modules:
   #   policycoreutils-python-utils                 ← setup-selinux (semanage fallback)
   #   gtk4-devel, gtk4-layer-shell-devel, pulseaudio-libs-devel,
   #     libinput-devel, libevdev-devel, sassc      ← swayosd
+  #   zig, pam-devel, libxcb-devel                 ← ly
   - type: dnf
     install:
       install-weak-deps: false
       packages:
         - zig # Zig compiler (required for ly)
+        - pam-devel # PAM development headers (required for ly)
+        - libxcb-devel # XCB development headers (required for ly)
         - cargo # Rust package manager
         - rust # Rust compiler
         - gtk3-devel # GTK3 development headers
@@ -613,6 +616,8 @@ modules:
     remove:
       packages:
         - zig # Remove Zig compiler
+        - pam-devel # Remove PAM headers
+        - libxcb-devel # Remove XCB headers
         - cargo # Remove Rust package manager
         - rust # Remove Rust compiler
         - rust-std-static # Remove Rust standard library
