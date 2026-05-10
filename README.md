@@ -65,7 +65,7 @@ Log out and back in after setup to activate the new shell and Homebrew PATH.
 ## Keybinds
 
 > [!IMPORTANT]
-> **CapsLock** is rebound to Mod (Super/Start). The physical Mod key becomes Menu (`XF86MenuKB` in niri config). **Alt+Space** is rebound to Enter, though Enter still works. Press **Mod+/** for the niri keybind dashboard before doing anything else, or you will have no idea how to navigate the desktop. App-specific keybinds are found in their config files and below.
+> **CapsLock** is rebound to Mod (Super/Start). The physical Mod key becomes Menu (`XF86MenuKB` in niri config). **Alt+Space** is rebound to Enter, though Enter still works. After running `sjust brew`, television will be installed with a channel dedicated to niri keybinds, accessible with **Mod+Space**. App-specific keybinds are found in their config files and below.
 
 The following are applied by `sjust`. Keybinds tend to fall into a left-hand cluster, for example, **Alt+WASD** for moving the cursor. Below is not exhaustive. 
 
