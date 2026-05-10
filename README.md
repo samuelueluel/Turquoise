@@ -54,16 +54,7 @@ System-wide default configs for niri and waybar are baked in as fallbacks, activ
 | `sjust obsidian-cli` | Sets up the Obsidian CLI wrapper |
 | `sjust obsidian-vault` | Configures the Obsidian vault name and path for television search |
 
-
-
 Log out and back in after setup to activate the new shell and Homebrew PATH.
-
----
-
-## Keybinds
-
-> [!IMPORTANT]
-> **CapsLock** is rebound to Mod (Super/Start). The physical Mod key becomes Menu (`XF86MenuKB` in niri config). **Alt+Space** is rebound to Enter, though Enter still works. After running `sjust brew`, television will be installed with a channel dedicated to niri keybinds, accessible with **Mod+Space**. Running `sjust chezmoi` introduces many idiosyncratic, app-specific keybinds that are found in their config files. 
 
 ---
 
