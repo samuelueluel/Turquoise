@@ -36,7 +36,8 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 System-wide default configs for niri and waybar are baked in as fallbacks, active until user dotfiles are applied. Optional user-level configuration is handled by `sjust`. All configuration files and scripts it applies are included in the image, tracking my personal [dotfiles repo](https://github.com/samuelueluel/dotfiles). This means `sjust` changes over time.
 
 > [!IMPORTANT]
-> `sjust` is meant for fresh installs without existing dotfiles. Beware of accidently overwriting your files.
+> `sjust` is meant for fresh installs without existing dotfiles. Beware of accidently overwriting your files. 
+> `sjust chezmoi` must run before `sjust brew` because brew depends on `~/.Brewfile` that chezmoi puts in place. `sjust zen` and `sjust zen-extensions` are both optional. If you run them, you must run `sjust zen` before `sjust chezmoi`, and then run `sjust zen-extensions` after `sjust chezmoi`. `sjust` recipes not listed in this README but present in the justfile should never be used. **CapsLock** is rebound to Mod (Super/Start). The physical Mod key becomes Menu (`XF86MenuKB` in niri config). **Alt+Space** is rebound to Enter, though Enter still works. After running `sjust brew`, television will be installed with a channel dedicated to niri keybinds, accessible with **Mod+Space**. Running `sjust chezmoi` introduces many idiosyncratic, app-specific keybinds that are found in their config files. 
 
 | Recipe | Description |
 |---|---|
@@ -53,9 +54,7 @@ System-wide default configs for niri and waybar are baked in as fallbacks, activ
 | `sjust obsidian-cli` | Sets up the Obsidian CLI wrapper |
 | `sjust obsidian-vault` | Configures the Obsidian vault name and path for television search |
 
-> [!IMPORTANT]
-> `sjust chezmoi` must run before `sjust brew` because brew depends on `~/.Brewfile` that chezmoi puts in place. `sjust zen` and `sjust zen-extensions` are both optional. If you run them, you must run `sjust zen` before `sjust chezmoi`, and then run `sjust zen-extensions` after `sjust chezmoi`.
-> `sjust` recipes not listed in this README but present in the justfile should never be used.
+
 
 Log out and back in after setup to activate the new shell and Homebrew PATH.
 
