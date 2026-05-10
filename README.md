@@ -120,8 +120,6 @@ Yazi is launched by Mod+E as a floating Kitty window that closes after selection
 
 ### Zen Browser
 
-This assumes the full `sjust` sequence has been run and extensions enabled.
-
 | Key | Action |
 |---|---|
 | Alt+W / S | Move up / down tab list (custom extension) |
@@ -132,6 +130,17 @@ This assumes the full `sjust` sequence has been run and extensions enabled.
 | Ctrl+Shift+Q | Open last closed tab |
 | Alt+Tab | Last recently focused tab (custom extension) |
 | Ctrl+R | Refresh |
+
+### Television
+
+Television is the primary launcher and fuzzy picker, launched with **Mod+Space**.
+
+| Key | Action |
+|---|---|
+| Alt+W / S | Move up / down |
+| Alt+Space / Enter | Confirm selection |
+| Ctrl+C | Copy entry to clipboard |
+| Esc | Launch remote |
 
 ---
 
