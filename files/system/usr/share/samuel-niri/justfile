@@ -383,6 +383,13 @@ update:
         echo -e "\033[31m  Homebrew not found, skipping.\033[0m"
     fi
 
+    echo -e "\n\033[34m=== Updating pipx Packages ===\033[0m"
+    if command -v pipx >/dev/null; then
+        sjust pipx
+    else
+        echo -e "\033[31m  pipx not found, skipping.\033[0m"
+    fi
+
     echo -e "\n\033[34m=== Checking Firmware Updates ===\033[0m"
     fwupdmgr refresh && fwupdmgr get-updates || true
 

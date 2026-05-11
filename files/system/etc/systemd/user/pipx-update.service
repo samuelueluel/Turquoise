@@ -1,0 +1,8 @@
+[Unit]
+Description=Update pipx packages daily
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sjust pipx

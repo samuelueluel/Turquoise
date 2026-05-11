@@ -142,6 +142,7 @@ modules:
         - uupd
         - swww
         - python3-waypaper
+        - pipx
 
   # ── Wayland compositor stack ──────────────────────────────────────────────
   # swayosd: COPR has no Fedora 44 builds; built from source via build-swayosd.sh
@@ -711,5 +712,6 @@ modules:
         - wireplumber.service
         - mpd.service
         - rmpcd.service
+        - pipx-update.timer
       disabled:
         - flatpak-user-update.timer
