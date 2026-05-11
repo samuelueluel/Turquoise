@@ -138,7 +138,6 @@ modules:
         - niri
         - dropbox
         - uupd
-        - swww
         - python3-waypaper
         - pipx
 
@@ -527,6 +526,12 @@ modules:
   - type: script
     scripts:
       - build-wlctl.sh
+
+  # ── Build swww from source ────────────────────────────────────────────────
+  # Not in Terra for Fedora 44 and ships no pre-built binaries; built with cargo
+  - type: script
+    scripts:
+      - build-swww.sh
 
   # ── Install Zed editor (Official Binary) ─────────────────────────────────
   # Terra RPM (1.0.0) has a wasmtime bug that crashes Zed when opening any file.
