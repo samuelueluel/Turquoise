@@ -283,7 +283,6 @@ modules:
     install:
       install-weak-deps: false
       packages:
-        - NetworkManager-tui
         - NetworkManager-openvpn
         - NetworkManager-openconnect
         - NetworkManager-openvpn-gnome
@@ -523,6 +522,12 @@ modules:
   - type: script
     scripts:
       - build-swayosd.sh
+
+  # ── Build wlctl from source ───────────────────────────────────────────────
+  # Successor to impala-nm; built from source using cargo
+  - type: script
+    scripts:
+      - build-wlctl.sh
 
   # ── Install Zed editor (Official Binary) ─────────────────────────────────
   # Terra RPM (1.0.0) has a wasmtime bug that crashes Zed when opening any file.

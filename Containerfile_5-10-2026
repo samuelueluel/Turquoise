@@ -1,4 +1,4 @@
-ARG BASE_IMAGE="ghcr.io/ublue-os/base-main@sha256:1011e00f997c332475d343832a2c020040920263fbc384b61fef83f5d84d0775"
+ARG BASE_IMAGE="ghcr.io/ublue-os/base-main@sha256:abda657dbe7658b45d7a61a0bc2e411b1814083026225796e2de8aa4fe1dd979"
 FROM "${BASE_IMAGE}" AS samuel-niri
 
 # This stage is responsible for holding onto
@@ -31,7 +31,7 @@ COPY cosign.pub /keys/samuel-niri.pub
 FROM samuel-niri
 ARG TARGETARCH
 ARG RECIPE=recipes/recipe.yml
-ARG IMAGE_REGISTRY=ghcr.io/samuelueluel
+ARG IMAGE_REGISTRY=localhost
 ARG BB_BUILD_FEATURES=""
 ARG CONFIG_DIRECTORY="/tmp/files"
 ARG MODULE_DIRECTORY="/tmp/modules"
@@ -127,7 +127,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","repos":{"nonfree":"rpmfusion"},"install":{"install-weak-deps":false,"packages":["rpmfusion-free-release-tainted"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","repos":{"nonfree":"rpmfusion"}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -151,7 +151,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","repos":{"copr":["yalter/niri","ublue-os/packages"],"files":["https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo"]},"install":{"install-weak-deps":false,"packages":["niri","zed","dropbox","uupd"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","repos":{"copr":["yalter/niri","ublue-os/packages"],"files":["https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo"]},"install":{"install-weak-deps":false,"packages":["niri","dropbox","uupd","swww","python3-waypaper"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -163,7 +163,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","repos":{"copr":["erikreider/swayosd"]},"install":{"install-weak-deps":false,"packages":["waybar","xdg-desktop-portal-gtk","xdg-desktop-portal-gnome","xwayland-satellite","swaylock","swayidle","swaybg","fuzzel","SwayNotificationCenter","wlsunset","kanshi","grim","slurp","wl-clipboard","polkit-kde","xdg-user-dirs","xdg-utils","gtk4-layer-shell","network-manager-applet","libappindicator-gtk3","jq","socat","pamixer","swayosd"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["wdisplays","waybar","wf-recorder","xdg-desktop-portal-gtk","xdg-desktop-portal-gnome","xwayland-satellite","swaylock","swayidle","SwayNotificationCenter","wlsunset","kanshi","grim","slurp","wl-clipboard","polkit-kde","xdg-user-dirs","xdg-utils","gtk4-layer-shell","network-manager-applet","libappindicator-gtk3","jq","socat","pamixer"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -187,7 +187,19 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["alacritty","kitty","zsh","zsh-autosuggestions","zsh-syntax-highlighting","bash-completion","fzf","nano","less"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","repos":{"copr":["scottames/ghostty"]},"install":{"install-weak-deps":false,"packages":["ghostty"]}}'
+RUN \
+--mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
+--mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
+--mount=type=bind,src=.bluebuild-scripts_6fc443c6,dst=/tmp/scripts/,Z \
+--mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["kitty","zsh","zsh-autosuggestions","zsh-syntax-highlighting","bash-completion","fzf","nano","less"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -211,7 +223,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["pipewire-alsa","pipewire-jack-audio-connection-kit","pipewire-pulse","wireplumber","rtkit","alsa-firmware","alsa-utils","alsa-sof-firmware","pipewire-gstreamer","lsp-plugins-lv2"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["pipewire-alsa","pipewire-jack-audio-connection-kit","pipewire-pulse","wireplumber","rtkit","alsa-firmware","alsa-utils","alsa-sof-firmware","pipewire-gstreamer","lsp-plugins-lv2","wiremix"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -259,7 +271,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["mpv","swayimg","ffmpeg","gstreamer1-plugin-libav","gstreamer1-vaapi","gstreamer1-plugins-good","gstreamer1-plugins-bad-free","gstreamer1-plugins-ugly","libdvdcss","libopenraw","libgsf","poppler-glib"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["mpv","mpd","mpc","beets","beets-plugins","beets-doc","swayimg","ffmpeg","gstreamer1-plugin-libav","gstreamer1-vaapi","gstreamer1-plugins-good","gstreamer1-plugins-bad-free","gstreamer1-plugins-ugly","libdvdcss","libopenraw","libgsf","poppler-glib"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -295,7 +307,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["papirus-icon-theme","adw-gtk3-theme","qt6ct","qt5ct","qt6-qtwayland","kvantum"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["papirus-icon-theme","papirus-icon-theme-dark","adw-gtk3-theme","xapp-symbolic-icons","qt6ct","qt5ct","qt6-qtwayland","kvantum"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -355,7 +367,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'default-flatpaks' '{"type":"default-flatpaks","configurations":[{"scope":"system","notify":true,"repo":{"title":"Flathub","url":"https://dl.flathub.org/repo/flathub.flatpakrepo"},"remove":["org.mozilla.firefox","org.mozilla.Thunderbird","org.kde.gwenview","org.kde.haruna","org.kde.kcalc","org.kde.kclock","org.kde.kontact","org.kde.kweather","org.kde.skanpage","com.github.tchx84.Flatseal","io.github.flattool.Warehouse","io.github.kolunmi.Bazaar","org.fedoraproject.MediaWriter","org.deskflow.deskflow","com.rafaelmardojai.Blanket","com.mattjakeman.ExtensionManager","io.github.DenysMb.Kontainer"]}]}'
+/tmp/scripts/run_module.sh 'default-flatpaks' '{"type":"default-flatpaks","configurations":[{"scope":"system","notify":true,"repo":{"title":"Flathub","url":"https://dl.flathub.org/repo/flathub.flatpakrepo"},"remove":["org.mozilla.firefox","org.mozilla.Thunderbird","org.kde.gwenview","org.kde.haruna","org.kde.kcalc","org.kde.kclock","org.kde.kontact","org.kde.kweather","org.kde.skanpage","io.github.flattool.Warehouse","org.fedoraproject.MediaWriter","org.deskflow.deskflow","com.rafaelmardojai.Blanket","com.mattjakeman.ExtensionManager","io.github.DenysMb.Kontainer"]}]}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
@@ -367,7 +379,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["cargo","rust","gtk3-devel","glib2-devel","meson","ninja-build","gcc","inih-devel","systemd-devel","scdoc","golang","make","cabextract","policycoreutils-python-utils"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"install-weak-deps":false,"packages":["cargo","rust","gtk3-devel","glib2-devel","gtk4-devel","gtk4-layer-shell-devel","pulseaudio-libs-devel","libinput-devel","libevdev-devel","sassc","meson","ninja-build","gcc","wayland-devel","sqlite-devel","xxhash-devel","inih-devel","systemd-devel","scdoc","golang","make","cabextract","policycoreutils-python-utils"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
@@ -391,7 +403,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["install-zen-browser.sh"]}'
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["build-swayosd.sh"]}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
@@ -403,7 +415,31 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["install-helium.sh"]}'
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["install-zed.sh"]}'
+RUN \
+--mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
+--mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
+--mount=type=bind,src=.bluebuild-scripts_6fc443c6,dst=/tmp/scripts/,Z \
+--mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["install-zen-browser.sh"]}'
+RUN \
+--mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
+--mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw \
+--mount=type=bind,src=.bluebuild-scripts_6fc443c6,dst=/tmp/scripts/,Z \
+--mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","repos":{"copr":["imput/helium"]},"install":{"install-weak-deps":false,"packages":["helium"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
@@ -451,7 +487,43 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["install-cliphist.sh"]}'
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["install-rmpc.sh"]}'
+RUN \
+--mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
+--mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
+--mount=type=bind,src=.bluebuild-scripts_6fc443c6,dst=/tmp/scripts/,Z \
+--mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["build-rmpcd.sh"]}'
+RUN \
+--mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
+--mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
+--mount=type=bind,src=.bluebuild-scripts_6fc443c6,dst=/tmp/scripts/,Z \
+--mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["build-fsel.sh"]}'
+RUN \
+--mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
+--mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
+--mount=type=bind,src=.bluebuild-scripts_6fc443c6,dst=/tmp/scripts/,Z \
+--mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
+--mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["build-cclip.sh"]}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
@@ -535,7 +607,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","remove":{"packages":["cargo","rust","rust-std-static","binutils","cpp","gtk3-devel","glib2-devel","meson","ninja-build","gcc","inih-devel","systemd-devel","scdoc","golang","golang-bin","golang-src","go-filesystem","make","cabextract","policycoreutils-python-utils"]}}'
+/tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","remove":{"packages":["cargo","rust","rust-std-static","binutils","cpp","gtk3-devel","glib2-devel","gtk4-devel","gtk4-layer-shell-devel","pulseaudio-libs-devel","libinput-devel","libevdev-devel","sassc","meson","ninja-build","gcc","wayland-devel","sqlite-devel","xxhash-devel","inih-devel","systemd-devel","scdoc","golang","golang-bin","golang-src","go-filesystem","make","cabextract","policycoreutils-python-utils"]}}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw \
@@ -559,7 +631,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["setup-selinux.sh"]}'
+/tmp/scripts/run_module.sh 'script' '{"type":"script","scripts":["setup-selinux.sh","hide-duplicate-desktops.sh"]}'
 RUN \
 --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw \
 --mount=type=bind,from=ghcr.io/blue-build/modules/systemd:latest,src=/modules,dst=/tmp/modules,rw \
@@ -571,7 +643,7 @@ RUN \
 --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-samuel-niri-latest-stage-samuel-niri \
 --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-samuel-niri-latest-stage-samuel-niri \
-/tmp/scripts/run_module.sh 'systemd' '{"type":"systemd","system":{"enabled":["greetd.service","bluetooth.service","libvirtd.socket","waydroid-container.service","keyd.service","power-profiles-daemon.service","thermald.service","avahi-daemon.service","cups.service","fstrim.timer","xfs_scrub_all.timer","uupd.timer"],"disabled":["gdm.service","sddm.service","flatpak-system-update.timer","brew-update.timer","rpm-ostreed-automatic.timer"]},"user":{"enabled":["pipewire.service","pipewire-pulse.service","wireplumber.service"],"disabled":["flatpak-user-update.timer"]}}'
+/tmp/scripts/run_module.sh 'systemd' '{"type":"systemd","system":{"enabled":["greetd.service","bluetooth.service","libvirtd.socket","waydroid-container.service","keyd.service","power-profiles-daemon.service","thermald.service","avahi-daemon.service","cups.service","fstrim.timer","xfs_scrub_all.timer","uupd.timer"],"disabled":["flatpak-system-update.timer","brew-update.timer","rpm-ostreed-automatic.timer"]},"user":{"enabled":["app-com.mitchellh.ghostty.service","pipewire.service","pipewire-pulse.service","wireplumber.service","mpd.service","rmpcd.service"],"disabled":["flatpak-user-update.timer"]}}'
 
 RUN \
 --mount=type=bind,src=.bluebuild-scripts_6fc443c6,dst=/scripts/,Z \
@@ -579,10 +651,10 @@ RUN \
 
 # Labels are added last since they cause cache misses with buildah
 LABEL io.artifacthub.package.readme-url="https://raw.githubusercontent.com/blue-build/cli/main/README.md"
-LABEL org.blue-build.build-id="5e3166f5-6b37-45c2-afd2-c2359d9599c0"
-LABEL org.opencontainers.image.base.digest="sha256:1011e00f997c332475d343832a2c020040920263fbc384b61fef83f5d84d0775"
+LABEL org.blue-build.build-id="62ad42c3-c969-462b-ab37-1a39207c11d7"
+LABEL org.opencontainers.image.base.digest="sha256:abda657dbe7658b45d7a61a0bc2e411b1814083026225796e2de8aa4fe1dd979"
 LABEL org.opencontainers.image.base.name="ghcr.io/ublue-os/base-main:latest"
-LABEL org.opencontainers.image.created="2026-04-23T04:40:58.462099793+00:00"
-LABEL org.opencontainers.image.description="Minimal Niri Wayland Fedora Atomic image for work laptop"
+LABEL org.opencontainers.image.created="2026-05-10T18:47:57.255588036+00:00"
+LABEL org.opencontainers.image.description="Fedora Atomic image with niri"
 LABEL org.opencontainers.image.source=""
 LABEL org.opencontainers.image.title="samuel-niri"

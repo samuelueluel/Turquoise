@@ -10,7 +10,7 @@ default:
     @just --justfile /usr/share/samuel-niri/justfile --list --unsorted
 
 # Full setup — run everything in order
-setup: dirs zen chezmoi zen-extensions brew flatpaks system
+setup: dirs zen chezmoi zen-extensions brew pipx flatpaks system
     update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
     gtk-update-icon-cache -f -t /usr/share/icons/oreo_spark_orange_cursors 2>/dev/null || true
     gtk-update-icon-cache -f -t /usr/share/icons/Papirus 2>/dev/null || true
@@ -173,6 +173,28 @@ brew:
         && mv "$BBREW_TMP/bbrew" "$(brew --prefix)/bin/bbrew"
     rm -rf "$BBREW_TMP"
 
+# Declaratively install/upgrade Python-based CLI tools from ~/.Pipxfile
+pipx:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    PIPX_FILE="{{HOME}}/.Pipxfile"
+    [[ -f "$PIPX_FILE" ]] || { echo "~/.Pipxfile not found, skipping."; exit 0; }
+    echo "Syncing pipx packages from $PIPX_FILE..."
+    while IFS= read -r pkg || [[ -n "$pkg" ]]; do
+        [[ "$pkg" =~ ^#.* ]] || [[ -z "$pkg" ]] && continue
+        # Strip comments and whitespace
+        pkg_name=$(echo "$pkg" | cut -d'#' -f1 | xargs)
+        # Extract base package name for 'pipx list' check (removes [extra])
+        base_name=$(echo "$pkg_name" | sed 's/\[.*//')
+        if pipx list --short | grep -q "^${base_name} "; then
+             echo "  Upgrading $pkg_name..."
+             pipx upgrade "$pkg_name" &>/dev/null || true
+        else
+             echo "  Installing $pkg_name..."
+             pipx install "$pkg_name"
+        fi
+    done < "$PIPX_FILE"
+
 # Add Flathub, install flatpaks, apply permission overrides
 flatpaks:
     #!/usr/bin/env bash
@@ -301,17 +323,11 @@ obsidian-vault name path:
     echo "Applying changes..."
     chezmoi apply --force
 
-# Install/upgrade headroom-ai[proxy] via pipx, upgrade all pipx tools, and back up Claude + Gemini config
-# Backup requires private SSH key (not in setup); skipped gracefully if unavailable
-llm:
+# Sync LLM tools via pipx and back up Claude + Gemini config
+# Backup requires private SSH key; skipped gracefully if unavailable
+llm: pipx
     #!/usr/bin/env bash
     set -euo pipefail
-    if pipx list --short | grep -q '^headroom-ai '; then
-        echo "headroom-ai already installed, skipping install."
-    else
-        pipx install "headroom-ai[proxy,code,mcp]"
-    fi
-    pipx upgrade-all
     if git -C "{{HOME}}/system_config_git" ls-remote --exit-code origin &>/dev/null; then
         rsync -av --exclude='sessions/' --exclude='history.jsonl' --exclude='telemetry/' --exclude='cache/' --exclude='image-cache/' --exclude='paste-cache/' --exclude='backups/' {{HOME}}/.claude/ {{HOME}}/system_config_git/claude-backup/claude/
         rsync -av --exclude='history/' --exclude='tmp/samuel/chats/' --exclude='tmp/samuel/tool-outputs/' --exclude='tmp/samuel/logs.json' {{HOME}}/.gemini/ {{HOME}}/system_config_git/claude-backup/gemini/
