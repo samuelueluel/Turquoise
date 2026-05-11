@@ -508,6 +508,7 @@ modules:
         - make
         - cabextract
         - policycoreutils-python-utils
+        - lz4-devel
 
   # ── Build nirius from source ──────────────────────────────────────────────
   # Terra is behind upstream; build directly from the tagged release tarball.
@@ -671,6 +672,7 @@ modules:
         - make
         - cabextract
         - policycoreutils-python-utils
+        - lz4-devel
 
   # ── Configure greetd + gtkgreet ───────────────────────────────────────────
   - type: script
