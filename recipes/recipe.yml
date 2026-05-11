@@ -131,9 +131,7 @@ modules:
       copr:
         - yalter/niri # niri compositor
         - ublue-os/packages # uupd unified updater
-      files:
-        - https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo
-        # dropbox.repo is baked in via the files module (avoids CI network block)
+        # terra.repo is baked in via the files module (avoids CI network block)
     install:
       install-weak-deps: false
       packages:
