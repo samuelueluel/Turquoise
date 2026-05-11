@@ -509,6 +509,7 @@ modules:
         - cabextract
         - policycoreutils-python-utils
         - lz4-devel
+        - wayland-protocols-devel
 
   # ── Build nirius from source ──────────────────────────────────────────────
   # Terra is behind upstream; build directly from the tagged release tarball.
@@ -673,6 +674,7 @@ modules:
         - cabextract
         - policycoreutils-python-utils
         - lz4-devel
+        - wayland-protocols-devel
 
   # ── Configure greetd + gtkgreet ───────────────────────────────────────────
   - type: script
