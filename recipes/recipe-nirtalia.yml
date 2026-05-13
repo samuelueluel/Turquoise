@@ -466,7 +466,7 @@ modules:
 
   # ── Install build-time toolchain ─────────────────────────────────────────
   # All build scripts assume these are pre-installed; cleaned up afterwards.
-  #   cargo, rust, rust-std-static, binutils, cpp  ← Rust builds (nirius, fsel, cclip, rmpcd, fsel, keyd, termfilechooser)
+  #   cargo, rust, rust-std-static, binutils, cpp  ← Rust builds (nirius, cclip, rmpcd, keyd, termfilechooser)
   #   gtk3-devel, glib2-devel                      ← nwg-look
   #   meson, ninja-build, gcc                      ← termfilechooser, cclip, keyd
   #   wayland-devel, sqlite-devel, xxhash-devel    ← cclip
@@ -556,12 +556,6 @@ modules:
   - type: script
     scripts:
       - build-rmpcd.sh
-
-  # ── Build fsel from source ──────────────────────────────────────────────────
-  # Not in Fedora repos; built from source using cargo
-  - type: script
-    scripts:
-      - build-fsel.sh
 
   # ── Build cclip from source ────────────────────────────────────────────────
   # Not in Fedora repos; built from source using cargo
