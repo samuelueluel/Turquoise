@@ -452,6 +452,8 @@ modules:
         - make # GNU make utility
         - cabextract # Microsoft cabinet file extractor
         - policycoreutils-python-utils # SELinux policy utilities (semanage)
+        - lz4-devel
+        - wayland-protocols-devel
 
   # ── Build nirius from source ──────────────────────────────────────────────
   # Terra is behind upstream; build directly from the tagged release tarball.
@@ -573,6 +575,8 @@ modules:
         - make # Remove GNU make
         - cabextract # Remove cabextract
         - policycoreutils-python-utils # Remove semanage utility
+        - lz4-devel
+        - wayland-protocols-devel
 
   # ── Configure greetd + gtkgreet ───────────────────────────────────────────
   - type: script
@@ -582,10 +586,8 @@ modules:
   # ── Custom SELinux policy ─────────────────────────────────────────────────
   - type: script
     scripts:
-      - setup-selinux-test.sh
+      - setup-selinux.sh
       - hide-duplicate-desktops.sh
-      - fix-sysusers.sh
-      - fix-rtkit-sysusers.sh
 
   # ── Systemd services ──────────────────────────────────────────────────────
   - type: systemd
