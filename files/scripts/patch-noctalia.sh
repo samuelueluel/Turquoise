@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# patch-noctalia.sh — customizes noctalia-shell Taskbar.qml
+# patch-noctalia.sh — customizes noctalia-shell QML files
+#   Taskbar.qml:
 #   1. Focused-icon indicator: full square background instead of tiny bottom dot
 #   2. Slightly larger spacing between taskbar icons
+#   WorkspacePill.qml:
+#   3. Unfocused workspace pills fully rounded; focused pill keeps radiusM
 #
 # Fails loudly if the upstream file shape changes (so build breaks
 # instead of silently producing an unpatched image).
@@ -71,6 +74,40 @@ src = src.replace(old_rad, new_rad, 1)
 
 path.write_text(src)
 print("Taskbar.qml patched OK")
+PYEOF
+
+# ── WorkspacePill.qml ────────────────────────────────────────────────────────
+PILL=""
+for p in \
+  /etc/xdg/quickshell/noctalia-shell/Modules/Bar/Extras/WorkspacePill.qml \
+  /usr/etc/xdg/quickshell/noctalia-shell/Modules/Bar/Extras/WorkspacePill.qml \
+  /usr/share/quickshell/noctalia-shell/Modules/Bar/Extras/WorkspacePill.qml ; do
+  if [ -f "$p" ]; then PILL="$p"; break; fi
+done
+
+if [ -z "$PILL" ]; then
+  echo "ERROR: WorkspacePill.qml not found in any expected location" >&2
+  exit 1
+fi
+
+echo "Patching: $PILL"
+
+python3 - "$PILL" << 'PYEOF'
+import sys, pathlib
+
+path = pathlib.Path(sys.argv[1])
+src = path.read_text()
+
+# --- 3) Unfocused pills fully rounded; focused pill keeps radiusM ------------
+old_radius = "    radius: Style.radiusM"
+new_radius = "    radius: workspace.isFocused ? Style.radiusM : width / 2"
+
+if old_radius not in src:
+    sys.exit(f"ERROR: pill radius line not found: {old_radius!r}")
+src = src.replace(old_radius, new_radius, 1)
+
+path.write_text(src)
+print("WorkspacePill.qml patched OK")
 PYEOF
 
 echo "patch-noctalia.sh complete"
