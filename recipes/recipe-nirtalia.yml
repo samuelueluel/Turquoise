@@ -522,6 +522,13 @@ modules:
     scripts:
       - install-zen-browser.sh
 
+  # ── Patch noctalia-shell QML ─────────────────────────────────────────────
+  # Customizes Taskbar.qml: full-square focused indicator + wider icon spacing.
+  # Script fails the build if upstream changes invalidate the patch anchors.
+  - type: script
+    scripts:
+      - patch-noctalia.sh
+
   # ── Install Helium Browser (COPR RPM) ────────────────────────────────────
   - type: dnf
     repos:
