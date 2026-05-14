@@ -152,8 +152,9 @@ modules:
         - xdg-desktop-portal-gtk # think already in base-main
         - xdg-desktop-portal-gnome # screencasting — Niri uses Smithay, not wlroots
         - xwayland-satellite
-        # swayidle/swaylock/wlsunset removed: noctalia-shell handles idle (IdleService via
+        # swayidle/swaylock removed: noctalia-shell handles idle (IdleService via
         # ext-idle-notify-v1), session lock, and night light natively.
+        - wlsunset
         - kanshi
         - grim
         - slurp
