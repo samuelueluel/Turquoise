@@ -199,7 +199,6 @@ modules:
         - zsh-autosuggestions
         - zsh-syntax-highlighting
         - bash-completion # think already in base-main
-        - fzf # think already in base-main
         # zoxide → homebrew: zoxide
         - nano # think already in base-main
         # nano-syntax-highlighting: not in Fedora repos
