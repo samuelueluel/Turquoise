@@ -1,4 +1,4 @@
-# turquoise
+# Turquoise
 
 [![Build](https://github.com/samuelueluel/turquoise/actions/workflows/build.yml/badge.svg)](https://github.com/samuelueluel/turquoise/actions/workflows/build.yml)
 
@@ -14,8 +14,8 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 | Category | Software |
 |---|---|
 | Compositor | niri |
-| Bar | waybar |
-| Dedicated launcher and search | television (see `sjust brew`; fsel is pre-brew backup) |
+| Desktop shell | noctalia |
+| Dedicated launcher and search | television (see `sjust brew`) |
 | Display manager | greetd + gtkgreet |
 | Shell | zsh + starship (see `sjust brew` and `sjust system`)|
 | Terminals | ghostty (primary), kitty (lobatimized for TUIs)|
@@ -27,7 +27,7 @@ Personal Fedora Atomic image built with [BlueBuild](https://github.com/blue-buil
 | Kernel | [@kernel-vanilla/stable](https://copr.fedorainfracloud.org/coprs/g/kernel-vanilla/stable/) |
 | CLI tools | `sjust brew` |
 | Flatpaks | `sjust flatpaks` |
-| Automation | Daily image + Flatpak + Homebrew + Distrobox updates via uupd, random wallpaper on login, trash and clipboard history emptied on boot |
+| Automation | Daily image + Flatpak + Homebrew + Distrobox updates via uupd, trash and clipboard history emptied on boot |
 
 ---
 
