@@ -10,7 +10,6 @@ echo "Removing system desktop files to prevent fsel duplicates..."
 
 APPS_TO_REMOVE=(
     "kitty.desktop"
-    "Alacritty.desktop"
     "dev.zed.Zed.desktop"
     "com.mitchellh.ghostty.desktop"
 )
