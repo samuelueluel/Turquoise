@@ -131,6 +131,7 @@ modules:
       copr:
         - yalter/niri # niri compositor
         - ublue-os/packages # uupd unified updater
+        - lionheartp/Hyprland # noctalia-shell-v5
         # terra.repo is baked in via the files module (avoids CI network block)
     install:
       install-weak-deps: false
@@ -138,7 +139,8 @@ modules:
         - niri # scrolling Wayland compositor
         - dropbox # Dropbox cloud storage client
         - uupd # unified updater for uBlue images
-        - noctalia-shell # desktop shell + bar (noctalia dep: this IS noctalia)
+        #- noctalia-shell # desktop shell + bar (noctalia dep: this IS noctalia)
+        - noctalia-shell-v5 # desktop shell + bar — v5 (testing)
         - pipx # install Python CLI tools in isolated environments
 
   # ── Wayland compositor stack ──────────────────────────────────────────────
@@ -522,9 +524,10 @@ modules:
   # ── Patch noctalia-shell QML ─────────────────────────────────────────────
   # Customizes Taskbar.qml: full-square focused indicator + wider icon spacing.
   # Script fails the build if upstream changes invalidate the patch anchors.
-  - type: script
-    scripts:
-      - patch-noctalia.sh
+  # Disabled while testing noctalia-shell-v5 (QML paths/content differ).
+  #- type: script
+  #  scripts:
+  #    - patch-noctalia.sh
 
   # ── Install Helium Browser (COPR RPM) ────────────────────────────────────
   - type: dnf
