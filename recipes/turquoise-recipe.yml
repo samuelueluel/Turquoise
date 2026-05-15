@@ -160,6 +160,7 @@ modules:
         - grim # screenshot capture for Wayland
         - slurp # interactive region/window selection (used with grim)
         - wl-clipboard # think already in base-main; wl-copy/wl-paste clipboard tools
+        - rofi # application launcher / dmenu replacement (Wayland support built in since 2.0)
         - xdg-user-dirs # creates/manages XDG dirs (Downloads, Documents, etc.)
         - xdg-utils # think already in base-main; xdg-open and desktop integration helpers
         - gtk4-layer-shell # GTK4 layer-shell for Wayland panels/overlays — noctalia dep
