@@ -139,8 +139,8 @@ modules:
         - niri # scrolling Wayland compositor
         - dropbox # Dropbox cloud storage client
         - uupd # unified updater for uBlue images
-        - noctalia-shell # desktop shell + bar (noctalia dep: this IS noctalia)
-        # - noctalia-shell-v5 # desktop shell + bar — v5 (testing)
+        # - noctalia-shell # desktop shell + bar (noctalia dep: this IS noctalia)
+        - noctalia-shell-v5 # desktop shell + bar — v5 (testing)
         - pipx # install Python CLI tools in isolated environments
 
   # ── Wayland compositor stack ──────────────────────────────────────────────
@@ -160,7 +160,6 @@ modules:
         - grim # screenshot capture for Wayland
         - slurp # interactive region/window selection (used with grim)
         - wl-clipboard # think already in base-main; wl-copy/wl-paste clipboard tools
-        - rofi # application launcher / dmenu replacement (Wayland support built in since 2.0)
         - xdg-user-dirs # creates/manages XDG dirs (Downloads, Documents, etc.)
         - xdg-utils # think already in base-main; xdg-open and desktop integration helpers
         - gtk4-layer-shell # GTK4 layer-shell for Wayland panels/overlays — noctalia dep
@@ -526,9 +525,9 @@ modules:
   # Customizes Taskbar.qml: full-square focused indicator + wider icon spacing.
   # Script fails the build if upstream changes invalidate the patch anchors.
   # Disabled while testing noctalia-shell-v5 (QML paths/content differ).
-  - type: script
-    scripts:
-      - patch-noctalia.sh
+  # - type: script
+  # scripts:
+  # - patch-noctalia.sh
 
   # ── Install Helium Browser (COPR RPM) ────────────────────────────────────
   - type: dnf
