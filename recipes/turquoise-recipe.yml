@@ -182,7 +182,7 @@ modules:
         - cage # minimal single-app Wayland compositor; runs gtkgreet in isolation
 
   # ── Terminals + shell ─────────────────────────────────────────────────────
-  # Note: starship and fzf-tab managed via dotfiles; most CLI stuff in Brewfile
+  # Note: most CLI stuff in Brewfile
   - type: dnf
     repos:
       copr:
@@ -201,9 +201,7 @@ modules:
         - zsh-autosuggestions # fish-like command suggestions based on history
         - zsh-syntax-highlighting # real-time command syntax highlighting in zsh
         - bash-completion # think already in base-main
-        # zoxide → homebrew: zoxide
         - nano # think already in base-main
-        # nano-syntax-highlighting: not in Fedora repos
         - less # think already in base-main
 
   # ── File management ───────────────────────────────────────────────────────
@@ -213,7 +211,6 @@ modules:
       install-weak-deps: false
       packages:
         - nemo # Cinnamon file manager (GUI backup to yazi)
-        # resvg: not in Fedora repos — yazi SVG previews unavailable without it
         - udiskie # auto-mounts removable drives via udisks2
         - trash-cli # XDG-compliant trash from the command line
         - unrar # RAR archive extractor
@@ -247,7 +244,7 @@ modules:
         - alsa-sof-firmware # Sound Open Firmware (Fedora name for sof-firmware) — think already in base-main
         - pipewire-gstreamer # think already in base-main
         - lsp-plugins-lv2 # LV2 audio plugins for host JACK apps
-        - wiremix # TUI mixer for PipeWire
+        # - wiremix # TUI mixer for PipeWire
 
   # ── Hardware + power ──────────────────────────────────────────────────────
   - type: dnf
@@ -331,18 +328,6 @@ modules:
         - rsync # think already in base-main
         - fd-find # fallback for yazi search; homebrew fd takes precedence if installed
         - fzf # fallback for yazi search; homebrew fzf takes precedence if installed
-        # ripgrep → homebrew: ripgrep
-        # bat → homebrew: bat
-        # eza → homebrew: eza
-        # atuin → homebrew: atuin
-        # gh → homebrew: gh
-        # television → homebrew: television
-        # git-delta → homebrew: git-delta
-        # golang-github-jesseduffield-lazygit → homebrew: lazygit
-        # du-dust → homebrew: dust
-        # yq → homebrew: yq
-        # glow → homebrew: glow
-        # zoxide → homebrew: zoxide
         - chezmoi # dotfile manager — must be in image to bootstrap dotfiles before brew
         - just # think already in base-main
         - smartmontools # think already in base-main
@@ -360,14 +345,8 @@ modules:
         - hostname # think already in base-main
         - inotify-tools # inotifywait/inotifywatch for filesystem event monitoring in scripts
         - plocate # fast file search via an indexed database (replaces mlocate)
-        # fastfetch → homebrew: fastfetch
-        # duf → homebrew: duf
-        # glances → homebrew: glances
-        # tldr → homebrew: tldr
         - man-db # think already in base-main
         - hwinfo # detailed hardware probe (more verbose than lshw/inxi)
-        # gnome-keyring (from base-main) handles org.freedesktop.secrets for browser password storage
-        # kf6-kwallet / kf6-kwallet-pam: removed — no PAM auto-unlock in Fedora 43 and gnome-keyring covers the use case
         - python3 # think already in base-main
         - python3-evdev # think already in base-main
         - os-prober # think already in base-main
